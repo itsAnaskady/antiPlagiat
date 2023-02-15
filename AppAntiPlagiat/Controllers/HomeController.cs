@@ -24,8 +24,22 @@ namespace AppAntiPlagiat.Controllers
         }
         public IActionResult LoginEnseignant()
         {
-            
-            return View();
+            if(signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+            {
+                return RedirectToAction("Dashboard", "admin");
+            }
+            else if(signInManager.IsSignedIn(User) && User.IsInRole("enseignant"))
+			{
+				return RedirectToAction("Profile", "enseignant");
+			}
+            else if(signInManager.IsSignedIn(User) && User.IsInRole("etudiant"))
+            {
+				return RedirectToAction("Profile", "etudiant");
+            }
+            else
+            {
+                return View();
+            }
         }
         [HttpPost]
         public async Task<IActionResult> LoginEnseignant(LoginViewModel model)
@@ -58,8 +72,23 @@ namespace AppAntiPlagiat.Controllers
 
         public IActionResult LoginEtudiant()
         {
-			return View();
-        }
+			if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+			{
+				return RedirectToAction("Dashboard", "admin");
+			}
+			else if (signInManager.IsSignedIn(User) && User.IsInRole("enseignant"))
+			{
+				return RedirectToAction("Profile", "enseignant");
+			}
+			else if (signInManager.IsSignedIn(User) && User.IsInRole("etudiant"))
+			{
+				return RedirectToAction("Profile", "etudiant");
+			}
+			else
+			{
+				return View();
+			}
+		}
 		[HttpPost]
 		public async Task<IActionResult> LoginEtudiant(LoginViewModel model)
 		{

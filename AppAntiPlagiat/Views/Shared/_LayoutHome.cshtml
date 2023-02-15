@@ -43,6 +43,42 @@
 				<a asp-action="LoginEtudiant" class="nav-link">Espace Etudiant</a>
 			</li>
 		  }
+		  @if(signInManager.IsSignedIn(User) && User.IsInRole("admin")){
+			<li class="nav-item">
+				<a asp-action="Dashboard" asp-controller="admin" class="nav-link">Dashboard</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="RechSuppModEnseignant" asp-controller="admin" class="nav-link">Gestion Enseignant</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="RechSuppModEtudiant" asp-controller="admin" class="nav-link">Gestion Etudiant</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="Messages" asp-controller="admin" class="nav-link">Messages</a>
+			</li>
+		  }
+		  @if(signInManager.IsSignedIn(User) && User.IsInRole("enseignant")){
+			<li class="nav-item">
+				<a asp-action="Profile" asp-controller="enseignant" class="nav-link">Profile</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="ListeEtudiants" asp-controller="enseignant" class="nav-link">Liste des Etudiants</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="ListeRapports" asp-controller="enseignant" class="nav-link">Liste des Rapports</a>
+			</li>
+		  }
+		   @if(signInManager.IsSignedIn(User) && User.IsInRole("etudiant")){
+			<li class="nav-item">
+				<a asp-action="Profile" asp-controller="etudiant" class="nav-link">Profile</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="VosRapports" asp-controller="etudiant" class="nav-link">Vos Rapports</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="ListeEnseignants" asp-controller="etudiant" class="nav-link">Liste des enseignants</a>
+			</li>
+		  }
           <li class="nav-item">
             <a asp-action="Contact" class="nav-link">Contact</a>
           </li>
@@ -85,8 +121,28 @@
 							<div class="textwidget">
 								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Accueil">Accueil</a><br />
 								@if(!signInManager.IsSignedIn(User)){
-								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEnseignant">Espace Enseignant</a><br>
-								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEtudiant" >Espace Etudiant</a><br />
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEnseignant">Espace Enseignant</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEtudiant" >Espace Etudiant</a><br />
+								}
+								@if(signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+								{
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Dashboard" asp-controller="admin">Dashboard</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="RechSuppModEnseignant" asp-controller="admin">Gestion Enseignant</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="RechSuppModEtudiant" asp-controller="admin" >Gestion Etudiant</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Messages" asp-controller="admin">Messages</a>
+									<br>
+								}
+								@if (signInManager.IsSignedIn(User) && User.IsInRole("enseignant"))
+								{
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="Profile" asp-controller="enseignant">Profile</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="ListeEtudiants" asp-controller="enseignant" >Liste des Etudiants</a><br />
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="ListeRapports" asp-controller="enseignant" >Liste des Rapports</a><br />
+								}
+								@if (signInManager.IsSignedIn(User) && User.IsInRole("etudiant"))
+								{
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="Profile" asp-controller="etudiant" >Profile</a><br />
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="VosRapports" asp-controller="etudiant">Vos Rapports</a><br />
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="ListeEnseignants" asp-controller="etudiant">Liste des enseignants</a><br />
 								}
 								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Contact" >Contact</a><br>
 								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Détails">Détails</a><br>

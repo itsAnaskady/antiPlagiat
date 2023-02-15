@@ -47,7 +47,7 @@ namespace AppAntiPlagiat.Controllers
                 var result = await userManager.CreateAsync(nvEnseignant, model.Password);
 
                 //add user to role
-                var result1 = await userManager.AddToRoleAsync(await userManager.FindByEmailAsync(model.Email), "admin");
+                var result1 = await userManager.AddToRoleAsync(await userManager.FindByEmailAsync(model.Email), "enseignant");
 
                 if (result.Succeeded && result1.Succeeded)
                 {
@@ -59,7 +59,7 @@ namespace AppAntiPlagiat.Controllers
                     ModelState.AddModelError("", error.Description);
                 }
             }
-            return View();
+            return View(model);
         }
         public IActionResult RechSuppModEnseignant()
         {
@@ -69,7 +69,45 @@ namespace AppAntiPlagiat.Controllers
         public IActionResult AjouterEtudiant()
         {
             ViewBag.Ltype = "admin";
+
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AjouterEtudiant(AjouterEtudiantViewModel model)
+        {
+            ViewBag.Ltype = "admin";
+            if (ModelState.IsValid)
+            {
+                Utilisateur nvEnseignant = new Utilisateur
+                {
+                    Email = model.Email,
+                    Nom = model.Nom,
+                    Prenom = model.Prenom,
+                    UserName = model.Email,
+                    NormalizedUserName = model.Email.ToUpper(),
+                    NormalizedEmail = model.Email.ToUpper(),
+                    Niveau = model.Niveau,
+                    IMGurl = "~/images/Users/NewUser.png",
+                    Filiere= model.Filiere,
+                    CNE = model.CNE 
+                };
+                //add user
+                var result = await userManager.CreateAsync(nvEnseignant, model.Password);
+
+                //add user to role
+                var result1 = await userManager.AddToRoleAsync(await userManager.FindByEmailAsync(model.Email), "etudiant");
+
+                if (result.Succeeded && result1.Succeeded)
+                {
+                    ViewBag.ajoutNV = "ajouté";
+                    return View(model);
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
         }
         public IActionResult RechSuppModEtudiant()
         {
