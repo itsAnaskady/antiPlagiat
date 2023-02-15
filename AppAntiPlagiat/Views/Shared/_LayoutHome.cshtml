@@ -1,0 +1,159 @@
+﻿@inject SignInManager<Utilisateur> signInManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AntiPLAGIAT | @ViewBag.Title</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="~/Style/plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="~/Style/dist/css/adminlte.min.css">
+	<link rel="icon" asp-append-version="true" href="~/images/AppAntiPlagiatLogo.png" />
+</head>
+<body class="hold-transition layout-top-nav">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+    <div class="container">
+      <a  class="navbar-brand">
+        <img src="~/images/AppAntiPlagiatLogo.png"  class="brand-image img-circle elevation-3" style="opacity: .8">
+			<span class="brand-text font-weight-light"><b>anti</b>Plagiat</span>
+      </a>
+
+      <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+        <!-- navbar links -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a  asp-action="Accueil" class="nav-link">Accueil</a>
+          </li>
+		  @if(!signInManager.IsSignedIn(User)){
+			<li class="nav-item">
+				<a asp-action="LoginEnseignant" class="nav-link">Espace Enseignant</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="LoginEtudiant" class="nav-link">Espace Etudiant</a>
+			</li>
+		  }
+          <li class="nav-item">
+            <a asp-action="Contact" class="nav-link">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a asp-action="Détails" class="nav-link">Détails</a>
+          </li>
+        </ul>
+		<ul class="navbar-nav ml-auto">
+		@if(signInManager.IsSignedIn(User)){
+			<form asp-action="LogOut" asp-controller="Home" method="post">
+                <input type="submit" class="btn btn-block btn-dark" value="se déconnecter"/>
+            </form>
+		}
+		
+	  </ul>
+      </div>
+
+	  
+      
+    </div>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    @RenderBody()
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+		<footer class="main-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 col-lg-3">
+						<!-- Text widget-->
+						<aside class="widget widget_text">
+							<div class="widget-title">
+								<h5>Accès Rapide</h5>
+							</div>
+							<div class="textwidget">
+								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Accueil">Accueil</a><br />
+								@if(!signInManager.IsSignedIn(User)){
+								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEnseignant">Espace Enseignant</a><br>
+								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEtudiant" >Espace Etudiant</a><br />
+								}
+								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Contact" >Contact</a><br>
+								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Détails">Détails</a><br>
+							</div>
+						</aside>
+					</div>
+					<div class="col-md-6 col-lg-3">
+						<!-- Text widget-->
+						<aside class="widget widget_text">
+							<div class="widget-title">
+								<h5>ENSAF</h5>
+							</div>
+							<div class="textwidget">
+								<p>L'ENSA de Fès, composante de l’Université Sidi Mohamed Ben Abdellah, est une école d’ingénieurs de l'enseignement supérieur publique créée en 2005, assurant une formation des ingénieurs d’état avec un cursus de Bac+5.</p>
+						</aside>
+					</div>
+					<div class="col-md-6 col-lg-3">
+						<!-- Text widget-->
+						<aside class="widget widget_text widget_tag_cloud">
+							<div class="widget-title">
+								<h5>Direct</h5>
+							</div>
+							<div class="textwidget">
+								E-mail: webmaster@ensaf.ac.ma
+								Phone: +212535600403 <br />
+								Fax: +212535600386 <br />
+							</div>
+						</aside>
+					</div>
+
+					<div class="col-md-6 col-lg-3">
+						<!-- Tags widget-->
+						<aside class="widget widget_tag_cloud">
+							<div class="widget-title">
+								<h5>Adresse</h5>
+							</div>
+							<div class="textwidget counter">
+								Ecole Nationale des Sciences Appliquées, Avenue My Abdallah Km 5<br />Route d'Imouzzer, Fès BP 72.<br />
+								<div class="counter-timer float-left" data-from="0" data-to="617">0</div>
+								<div>
+									@ViewBag.NbVisitors (dernières 24h)
+								</div>
+							</div>
+						</aside>
+					</div>
+				</div>
+			</div>
+			<div class="footer-copyright">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="text-center"><span class="copyright">© @DateTime.Now.Year ENSAF, Copyright ensaf.ac.ma</span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+</div>
+
+
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+    <script src="~/Style/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+    <script src="~/Style/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!--theme scripts -->
+    <script src="~/Style/dist/js/adminlte.min.js"></script>
+
+</body>
+</html>

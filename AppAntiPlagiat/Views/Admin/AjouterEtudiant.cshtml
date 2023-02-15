@@ -1,0 +1,104 @@
+﻿@model AjouterEtudiantViewModel
+@{
+    ViewBag.Title = "Ajouter Etudiant";
+}
+<div class="hold-transition register-page">
+    <div class="register-box">
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a class="h1"><b>Ajouter</b>Etudiant</a>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg">Remplir les champs pour ajouter un étudiant</p>
+
+                <form method="post">
+                    <div class="input-group mb-3">
+                        <input type="text" asp-for="Nom" class="form-control" placeholder="Nom de l'enseignant">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Nom" hidden class="small text-danger"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" asp-for="Prenom" class="form-control" placeholder="Prénom de l'enseignant">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Prenom" hidden class="small text-danger"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" asp-for="CNE" class="form-control" placeholder="CNE">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="CNE" hidden class="small text-danger"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="email" asp-for="Email" class="form-control" placeholder="L'Email de l'enseignant">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Email" hidden class="small text-danger"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Mot de passe">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Password" hidden class="small text-danger"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Confirmer le mot de passe">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="RetryPassword" hidden class="small text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputStatus">Filière :</label><br />
+                        <select id="inputStatus" class="form-control custom-select">
+                            <option selected disabled>-- Choisir la filière --</option>
+                            <option>INFO</option>
+                            <option>INDUS</option>
+                            <option>GMSA</option>
+                            <option>GESI</option>
+                            <option>GTR</option>
+                            <option>SEII</option>
+                        </select>
+                        <span asp-validation-for="Filiere" hidden class="small text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputStatus">Niveau :</label><br />
+                        <select id="inputStatus" class="form-control custom-select">
+                            <option selected disabled>-- Choisir le niveau --</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
+                        <span asp-validation-for="Niveau" hidden class="small text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <!-- /.col -->
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Ajouter</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+            </div>
+            <!-- /.form-box -->
+        </div><!-- /.card -->
+    </div>
+</div>

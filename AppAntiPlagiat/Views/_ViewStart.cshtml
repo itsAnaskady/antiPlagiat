@@ -1,0 +1,19 @@
+﻿@{
+    if (ViewBag.Ltype == "admin")
+    {
+        Layout = "_LayoutAdmin";
+    }
+    else if (ViewBag.Ltype == "enseignant")
+    {
+        Layout = "_LayoutEnseignant";
+    }
+    else if (ViewBag.Ltype == "etudiant")
+    {
+        Layout = "_LayoutEtudiant";
+    }
+    else
+    {
+        Layout = "_LayoutHome";
+    }
+    
+}

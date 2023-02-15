@@ -1,0 +1,49 @@
+﻿@model ContactViewModel
+@{
+    ViewBag.Title = "Contact";
+}
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-body row">
+            <div class="col-5 text-center d-flex align-items-center justify-content-center">
+                <div class="">
+                    <h2>anti<strong>PLAGIAT</strong></h2>
+                    <p class="lead mb-5">
+                        Ecole Nationale des Sciences Appliquées, 
+                        Avenue My Abdallah Km 5 Route d'Imouzzer, 
+                        Fès BP 72.<br>
+                        Phone: +212535600403 <br />
+                        Fax: +212535600386
+                    </p>
+                </div>
+            </div>
+            <div class="col-7">
+                <form method="post">
+                    <div class="form-group">
+                        <label  asp-for="FullName">Nom Complet</label>
+                        <input type="text" asp-for="FullName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email">E-Mail</label>
+                        <input type="email"  asp-for="Email" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Subject">Sujet</label>
+                        <input type="text" asp-for="Subject" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Message">Message</label>
+                        <textarea asp-for="Message" class="form-control" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Envoyer">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- /.content -->
