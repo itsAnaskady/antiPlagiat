@@ -11,10 +11,12 @@ namespace AppAntiPlagiat.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<Utilisateur> userManager;
+        private readonly ApplicationDbContext applicationDbContext;
 
-        public AdminController(UserManager<Utilisateur> userManager)
+        public AdminController(UserManager<Utilisateur> userManager,ApplicationDbContext applicationDbContext)
         {
             this.userManager = userManager;
+            this.applicationDbContext = applicationDbContext;
         }
         public IActionResult Dashboard()
         {
@@ -61,10 +63,12 @@ namespace AppAntiPlagiat.Controllers
             }
             return View(model);
         }
-        public IActionResult RechSuppModEnseignant()
+        public async Task<IActionResult> RechSuppModEnseignant()
         {
             ViewBag.Ltype = "admin";
-            return View();
+            var users = await userManager.GetUsersInRoleAsync("enseignant");
+
+            return View(users);
         }
         public IActionResult AjouterEtudiant()
         {
@@ -109,10 +113,11 @@ namespace AppAntiPlagiat.Controllers
             }
             return View(model);
         }
-        public IActionResult RechSuppModEtudiant()
+        public async Task<IActionResult> RechSuppModEtudiant()
         {
             ViewBag.Ltype = "admin";
-            return View();
+            var etudiants = await userManager.GetUsersInRoleAsync("etudiant");
+            return View(etudiants);
         }
         public IActionResult Affectation()
         {

@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<Utilisateur>
 @{
     ViewBag.Title = "Liste des enseignants";
 }
@@ -32,7 +32,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-
+                                @foreach(Utilisateur enseignant in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @enseignant.Nom
+                                        </td>
+                                        <td>
+                                            @enseignant.Prenom
+                                        </td>
+                                        <td>
+                                            @enseignant.Email
+                                        </td>
+                                        <td>
+                                            @enseignant.Departement
+                                        </td>
+                                        <td>
+                                            supprimer,modifier
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                             <tfoot>
                                 <tr>

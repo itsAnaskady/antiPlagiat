@@ -1,4 +1,6 @@
-﻿@{
+﻿
+@model IEnumerable<Utilisateur>
+@{
     ViewBag.Title = "Liste des étudiants";
 }
 <section class="content">
@@ -39,7 +41,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-
+                                @foreach(Utilisateur etudiant in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @etudiant.Nom
+                                        </td>
+                                        <td>
+                                            @etudiant.Prenom
+                                        </td>
+                                        <td>
+                                            @etudiant.CNE
+                                        </td>
+                                        <td>
+                                            @etudiant.Filiere
+                                        </td>
+                                        <td>
+                                            @etudiant.Niveau
+                                        </td>
+                                        <td>
+                                            @etudiant.Email
+                                        </td>
+                                        <td>
+                                            Rapports
+                                        </td>
+                                        <td>
+                                            supprimer,modifier
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                             <tfoot>
                                 <tr>
