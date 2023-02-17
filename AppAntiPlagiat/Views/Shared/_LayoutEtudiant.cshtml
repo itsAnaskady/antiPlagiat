@@ -28,12 +28,15 @@
                 <li class="nav-item d-none d-sm-inline-block">
                     <a asp-action="Profile" class="nav-link">Profile</a>
                 <li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a asp-action="Accueil" asp-controller="Home" class="nav-link">Accueil</a>
+                </li>
             </ul>
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <form method="post">
-                    <input type="submit" class="btn btn-block btn-dark" value="se déconnecter" />
+                    <input type="submit" asp-action="LogOut" asp-controller="Home" class="btn btn-block btn-dark" value="se déconnecter" />
                 </form>
             </ul>
         </nav>

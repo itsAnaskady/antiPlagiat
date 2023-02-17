@@ -1,5 +1,4 @@
 using AppAntiPlagiat.Models;
-using AppAntiPlagiat.Models.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MyDB")));
-builder.Services.AddScoped<IApplicationRepository<Utilisateur>,SQLUserRepository>();
 builder.Services.AddIdentity<Utilisateur, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 var app = builder.Build();
 

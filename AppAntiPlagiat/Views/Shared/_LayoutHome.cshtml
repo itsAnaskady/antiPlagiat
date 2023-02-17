@@ -13,6 +13,18 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="~/Style/dist/css/adminlte.min.css">
 	<link rel="icon" asp-append-version="true" href="~/images/AppAntiPlagiatLogo.png" />
+	<environment include="Developement">
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery/jquery.min.js"></script>
+        <script src="~/lib/jquery/jquery.slim.js"></script>
+        <script src="~/lib/jquery/jquery.slim.min.js"></script>
+        <a href="~/lib/jquery/jquery.min.map">~/lib/jquery/jquery.min.map</a>
+        <a href="~/lib/jquery/jquery.slim.min.map">~/lib/jquery/jquery.slim.min.map</a>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+	</environment>
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
@@ -43,9 +55,47 @@
 				<a asp-action="LoginEtudiant" class="nav-link">Espace Etudiant</a>
 			</li>
 		  }
-          <li class="nav-item">
-            <a asp-action="Contact" class="nav-link">Contact</a>
-          </li>
+		  @if(signInManager.IsSignedIn(User) && User.IsInRole("admin")){
+			<li class="nav-item">
+				<a asp-action="Dashboard" asp-controller="admin" class="nav-link">Dashboard</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="RechSuppModEnseignant" asp-controller="admin" class="nav-link">Gestion Enseignant</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="RechSuppModEtudiant" asp-controller="admin" class="nav-link">Gestion Etudiant</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="Messages" asp-controller="admin" class="nav-link">Messages</a>
+			</li>
+		  }
+		  @if(signInManager.IsSignedIn(User) && User.IsInRole("enseignant")){
+			<li class="nav-item">
+				<a asp-action="Profile" asp-controller="enseignant" class="nav-link">Profile</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="ListeEtudiants" asp-controller="enseignant" class="nav-link">Liste des Etudiants</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="ListeRapports" asp-controller="enseignant" class="nav-link">Liste des Rapports</a>
+			</li>
+		  }
+		   @if(signInManager.IsSignedIn(User) && User.IsInRole("etudiant")){
+			<li class="nav-item">
+				<a asp-action="Profile" asp-controller="etudiant" class="nav-link">Profile</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="VosRapports" asp-controller="etudiant" class="nav-link">Vos Rapports</a>
+			</li>
+			<li class="nav-item">
+				<a asp-action="ListeEnseignants" asp-controller="etudiant" class="nav-link">Liste des enseignants</a>
+			</li>
+		  }
+		  @if(!signInManager.IsSignedIn(User)){
+			  <li class="nav-item">
+				<a asp-action="Contact" class="nav-link">Contact</a>
+			  </li>
+		  }
           <li class="nav-item">
             <a asp-action="Détails" class="nav-link">Détails</a>
           </li>
@@ -85,8 +135,28 @@
 							<div class="textwidget">
 								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Accueil">Accueil</a><br />
 								@if(!signInManager.IsSignedIn(User)){
-								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEnseignant">Espace Enseignant</a><br>
-								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEtudiant" >Espace Etudiant</a><br />
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEnseignant">Espace Enseignant</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="LoginEtudiant" >Espace Etudiant</a><br />
+								}
+								@if(signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+								{
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Dashboard" asp-controller="admin">Dashboard</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="RechSuppModEnseignant" asp-controller="admin">Gestion Enseignant</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="RechSuppModEtudiant" asp-controller="admin" >Gestion Etudiant</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Messages" asp-controller="admin">Messages</a>
+									<br>
+								}
+								@if (signInManager.IsSignedIn(User) && User.IsInRole("enseignant"))
+								{
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="Profile" asp-controller="enseignant">Profile</a><br>
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="ListeEtudiants" asp-controller="enseignant" >Liste des Etudiants</a><br />
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="ListeRapports" asp-controller="enseignant" >Liste des Rapports</a><br />
+								}
+								@if (signInManager.IsSignedIn(User) && User.IsInRole("etudiant"))
+								{
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="Profile" asp-controller="etudiant" >Profile</a><br />
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="VosRapports" asp-controller="etudiant">Vos Rapports</a><br />
+									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="ListeEnseignants" asp-controller="etudiant">Liste des enseignants</a><br />
 								}
 								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Contact" >Contact</a><br>
 								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Détails">Détails</a><br>
@@ -101,6 +171,7 @@
 							</div>
 							<div class="textwidget">
 								<p>L'ENSA de Fès, composante de l’Université Sidi Mohamed Ben Abdellah, est une école d’ingénieurs de l'enseignement supérieur publique créée en 2005, assurant une formation des ingénieurs d’état avec un cursus de Bac+5.</p>
+							</div>
 						</aside>
 					</div>
 					<div class="col-md-6 col-lg-3">
@@ -110,7 +181,7 @@
 								<h5>Direct</h5>
 							</div>
 							<div class="textwidget">
-								E-mail: webmaster@ensaf.ac.ma
+								E-mail: webmaster@ensaf.ac.ma<br/>
 								Phone: +212535600403 <br />
 								Fax: +212535600386 <br />
 							</div>

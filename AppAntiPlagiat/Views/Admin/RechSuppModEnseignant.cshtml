@@ -1,5 +1,63 @@
 ﻿
 @{
-    ViewBag.Title = "Enseignants";
+    ViewBag.Title = "Liste des enseignants";
 }
-<h1>Enseignants</h1>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Table de gestion des étudiants.</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Département
+                                        <select class="table-filter" onchange="filter_rows()">
+                                            <option value="all" selected disabled >--tout--</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        Modifications
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Département
+
+                                    </th>
+                                    <th>
+                                        Modifications
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                         <script>
+                            getUniqueValuesFromColumn()
+                         </script>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

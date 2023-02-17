@@ -1,5 +1,30 @@
-﻿
+﻿@model UserViewModel
 @{
     ViewBag.Title = "Profile";
 }
-<h1>Profile Enseignant</h1>
+<div class="card card-primary card-outline">
+    <div class="card-body box-profile">
+        <div class="text-center">
+            <img class="profile-user-img img-fluid img-circle"
+                 asp-append-version="true"
+                 src="@Model.IMGurl"
+                 alt="img description"
+                 >
+        </div>
+
+        <h3 class="profile-username text-center">@Model.Nom @Model.Prenom</h3>
+
+        <p class="text-muted text-center">Bio</p>
+
+        <ul class="list-group list-group-unbordered mb-3">
+            <li class="list-group-item">
+                <b>Address Email</b> <a class="float-right">@Model.Email</a>
+            </li>
+            <li class="list-group-item">
+                <b>Département</b> <a class="float-right">@Model.Departement</a>
+            </li>
+        </ul>
+
+    </div>
+    <!-- /.card-body -->
+</div>
