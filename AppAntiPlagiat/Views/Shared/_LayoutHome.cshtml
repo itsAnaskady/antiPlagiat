@@ -13,6 +13,18 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="~/Style/dist/css/adminlte.min.css">
 	<link rel="icon" asp-append-version="true" href="~/images/AppAntiPlagiatLogo.png" />
+	<environment include="Developement">
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery/jquery.min.js"></script>
+        <script src="~/lib/jquery/jquery.slim.js"></script>
+        <script src="~/lib/jquery/jquery.slim.min.js"></script>
+        <a href="~/lib/jquery/jquery.min.map">~/lib/jquery/jquery.min.map</a>
+        <a href="~/lib/jquery/jquery.slim.min.map">~/lib/jquery/jquery.slim.min.map</a>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+	</environment>
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
@@ -79,9 +91,11 @@
 				<a asp-action="ListeEnseignants" asp-controller="etudiant" class="nav-link">Liste des enseignants</a>
 			</li>
 		  }
-          <li class="nav-item">
-            <a asp-action="Contact" class="nav-link">Contact</a>
-          </li>
+		  @if(!signInManager.IsSignedIn(User)){
+			  <li class="nav-item">
+				<a asp-action="Contact" class="nav-link">Contact</a>
+			  </li>
+		  }
           <li class="nav-item">
             <a asp-action="Détails" class="nav-link">Détails</a>
           </li>
@@ -157,6 +171,7 @@
 							</div>
 							<div class="textwidget">
 								<p>L'ENSA de Fès, composante de l’Université Sidi Mohamed Ben Abdellah, est une école d’ingénieurs de l'enseignement supérieur publique créée en 2005, assurant une formation des ingénieurs d’état avec un cursus de Bac+5.</p>
+							</div>
 						</aside>
 					</div>
 					<div class="col-md-6 col-lg-3">
@@ -166,7 +181,7 @@
 								<h5>Direct</h5>
 							</div>
 							<div class="textwidget">
-								E-mail: webmaster@ensaf.ac.ma
+								E-mail: webmaster@ensaf.ac.ma<br/>
 								Phone: +212535600403 <br />
 								Fax: +212535600386 <br />
 							</div>

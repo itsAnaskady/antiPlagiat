@@ -9,6 +9,7 @@ namespace AppAntiPlagiat.Models
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<Utilisateur> Utilisateurs { get; set; }
         public DbSet<Rapport> Rapports { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

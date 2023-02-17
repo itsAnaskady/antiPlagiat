@@ -5,16 +5,19 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using AppAntiPlagiat.ViewModels;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppAntiPlagiat.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext dbContext;
         private readonly SignInManager<Utilisateur> signInManager;
         private readonly UserManager<Utilisateur> userManager;
 
-        public HomeController(SignInManager<Utilisateur> signInManager,UserManager<Utilisateur> userManager)
+        public HomeController(ApplicationDbContext dbContext,SignInManager<Utilisateur> signInManager,UserManager<Utilisateur> userManager)
         {
+            this.dbContext = dbContext;
             this.signInManager = signInManager;
             this.userManager = userManager;
         }
@@ -102,7 +105,7 @@ namespace AppAntiPlagiat.Controllers
 
 					if (role == "etudiant")
 					{
-						return RedirectToAction("Dashboard", "Admin");
+						return RedirectToAction("Profile", "Etudiant");
 					}
 					else
 					{
@@ -120,6 +123,26 @@ namespace AppAntiPlagiat.Controllers
         public IActionResult Contact()
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult Contact(ContactViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Message m = new Message()
+                {
+                    Email= model.Email,
+                    Subject = model.Subject,
+                    Emetteur = model.Nom + " " + model.Prenom,
+                    Msg = model.Message,
+                    dateEnvoie = DateTime.Now
+                };
+                dbContext.Messages.Add(m);
+                dbContext.SaveChanges();
+                ViewBag.ajoutNV = "ajouté";
+                return View();
+            }
+            return View(model);
         }
         public IActionResult ForgetPassword()
         {

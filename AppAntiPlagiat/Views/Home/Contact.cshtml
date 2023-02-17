@@ -3,7 +3,16 @@
     ViewBag.Title = "Contact";
 }
 <section class="content">
+@if (ViewBag.ajoutNV != null)
+{
 
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-check"></i> Message envoyé!</h5>
+        Votre message est envoyé. L'administrateur vous contactera dès que possible sur votre adress email.
+    </div>
+    ViewBag.ajoutNV = null;
+}
     <!-- Default box -->
     <div class="card">
         <div class="card-body row">
@@ -22,8 +31,12 @@
             <div class="col-7">
                 <form method="post">
                     <div class="form-group">
-                        <label  asp-for="FullName">Nom Complet</label>
-                        <input type="text" asp-for="FullName" class="form-control" />
+                        <label  asp-for="Nom">Nom</label>
+                        <input type="text" asp-for="Nom" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label  asp-for="Prenom">Prénom</label>
+                        <input type="text" asp-for="Prenom" class="form-control" />
                     </div>
                     <div class="form-group">
                         <label asp-for="Email">E-Mail</label>
@@ -40,6 +53,7 @@
                     <div class="form-group">
                         <input type="submit" class="btn btn-primary" value="Envoyer">
                     </div>
+                    <div class="text text-danger" asp-validation-summary="All"></div>
                 </form>
             </div>
         </div>
