@@ -23,6 +23,7 @@ namespace AppAntiPlagiat.Controllers
         }
         public IActionResult Accueil()
         {
+            
             return View();
         }
         public IActionResult LoginEnseignant()

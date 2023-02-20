@@ -1,0 +1,139 @@
+﻿@model Message
+@{
+    ViewBag.Title = "Message de : " + Model.Emetteur;
+}
+<div id="partial-content-container">
+    <div class="content" style="padding : 2%">
+        <div class="row" >
+            <div class="col-md-3">
+                <a asp-action="Messages" asp-controller="Admin" class="btn btn-primary btn-block mb-3">Retour à la boîte de réception</a>
+            </div>
+        </div>
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Message de @Model.Emetteur</h3>
+
+                <div class="card-tools">
+                    @if(ViewBag.prev!=null){
+                        <a href="ReadMessage?currentMsgId=@ViewBag.prev" class="btn btn-tool" title="Précédent"><i class="fas fa-chevron-left"></i></a>
+                    }
+                    
+                    @if(ViewBag.suiv!=null){
+                        <a href="ReadMessage?currentMsgId=@ViewBag.suiv" class="btn btn-tool" title="Suivant"><i class="fas fa-chevron-right"></i></a>
+                    }
+                    
+                    </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <div class="mailbox-read-info">
+                    <h5>Sujet : @Model.Subject</h5>
+                    <h6>
+                        Email : @Model.Email
+                        <span class="mailbox-read-time float-right">@Model.dateEnvoie.ToLongDateString()</span>
+                    </h6>
+                </div>
+                <!-- /.mailbox-controls -->
+                <div class="mailbox-read-message">
+                   <p>
+                       @Model.Msg
+                   </p>
+                </div>
+                <!-- /.mailbox-read-message -->
+            </div>
+            <!-- /.card-footer -->
+            <div class="card-footer">
+                <div class="float-right">
+                    <button type="button" class="btn btn-default" value="@Model.Email" id="copy-button"><i class="fas fa-copy"></i> Copier l'email</button>
+                    <button type="button" class="btn btn-default" value="@Model.Id" id="delete-msg"><i class="far fa-trash-alt"></i> Supprimer</button>
+                </div>
+        
+            </div>
+            <!-- /.card-footer -->
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#delete-msg").on("click", function () {
+                var confirmed = confirm("Voulez-vous vraiment supprimer ce message ?")
+                if(confirmed){
+                    var msgId = $("#delete-msg").map(function () {
+                        return $(this).val();
+                    }).get();
+                    
+                    $.ajax({
+                        url: "/Admin/DeleteMessage",
+                        type: "POST",
+                        data: { Id: msgId },
+                        success: function (data) {
+                        
+                            window.location.href = 'Messages';
+
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                }else{
+                    var options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "2000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr.options = options;
+                    toastr.info('Opération annulée.');
+                }
+            });
+        });
+    </script>
+    
+    
+    <script>
+        $(document).ready(function() {
+          $("#copy-button").click(function() {
+                var textToCopy = $("#copy-button").val();
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    
+                       var options = {
+                          "closeButton": false,
+                          "debug": false,
+                          "newestOnTop": false,
+                          "progressBar": false,
+                          "positionClass": "toast-bottom-center",
+                          "preventDuplicates": false,
+                          "onclick": null,
+                          "showDuration": "300",
+                          "hideDuration": "1000",
+                          "timeOut": "2000",
+                          "extendedTimeOut": "1000",
+                          "showEasing": "swing",
+                          "hideEasing": "linear",
+                          "showMethod": "fadeIn",
+                          "hideMethod": "fadeOut"
+                       };
+                    toastr.options = options;
+                    toastr.info(textToCopy + ' est copié.');
+                    
+                    
+                    
+            }, function(err) {
+                    toastr.error('un error se produit.');
+            });
+          });
+        });
+    </script>
+}

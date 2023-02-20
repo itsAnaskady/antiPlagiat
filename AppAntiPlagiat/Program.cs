@@ -9,6 +9,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MyDB")));
 builder.Services.AddIdentity<Utilisateur, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,7 +22,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();

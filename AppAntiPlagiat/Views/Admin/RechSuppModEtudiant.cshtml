@@ -1,70 +1,102 @@
-﻿@{
+﻿
+@model IEnumerable<Utilisateur>
+@{
     ViewBag.Title = "Liste des étudiants";
 }
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Table de gestion des étudiants.</h3>
+<div id="partial-content-container">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Table de gestion des étudiants.</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>CNE</th>
+                                        <th>
+                                            Filière
+                                            <select class="table-filter" onchange="filter_rows()">
+                                                <option value="all" selected disabled >--tout--</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            Niveau
+                                            <select class="table-filter" onchange="filter_rows()">
+                                                <option value="all" selected disabled>--tout--</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            Email
+                                        </th>
+                                        <th>Rapports</th>
+                                        <th>
+                                            Modifications
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach(Utilisateur etudiant in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @etudiant.Nom
+                                            </td>
+                                            <td>
+                                                @etudiant.Prenom
+                                            </td>
+                                            <td>
+                                                @etudiant.CNE
+                                            </td>
+                                            <td>
+                                                @etudiant.Filiere
+                                            </td>
+                                            <td>
+                                                @etudiant.Niveau
+                                            </td>
+                                            <td>
+                                                @etudiant.Email
+                                            </td>
+                                            <td>
+                                                Rapports
+                                            </td>
+                                            <td>
+                                                supprimer,modifier
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>CNE</th>
+                                        <th>Filière</th>
+                                        <th>Niveau</th>
+                                        <th>
+                                            Email
+                                        </th>
+                                        <th>Rapports</th>
+                                        <th>
+                                            Modifications
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                             <script>
+                                getUniqueValuesFromColumn()
+                             </script>
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Prénom</th>
-                                    <th>CNE</th>
-                                    <th>
-                                        Filière
-                                        <select class="table-filter" onchange="filter_rows()">
-                                            <option value="all" selected disabled >--tout--</option>
-                                        </select>
-                                    </th>
-                                    <th>
-                                        Niveau
-                                        <select class="table-filter" onchange="filter_rows()">
-                                            <option value="all" selected disabled>--tout--</option>
-                                        </select>
-                                    </th>
-                                    <th>
-                                        Email
-                                    </th>
-                                    <th>Rapports</th>
-                                    <th>
-                                        Modifications
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Prénom</th>
-                                    <th>CNE</th>
-                                    <th>Filière</th>
-                                    <th>Niveau</th>
-                                    <th>
-                                        Email
-                                    </th>
-                                    <th>Rapports</th>
-                                    <th>
-                                        Modifications
-                                    </th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                         <script>
-                            getUniqueValuesFromColumn()
-                         </script>
-                    </div>
-                    <!-- /.card-body -->
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
