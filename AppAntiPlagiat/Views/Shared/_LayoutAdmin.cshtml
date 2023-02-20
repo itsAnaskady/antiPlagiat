@@ -12,8 +12,11 @@
   <link rel="stylesheet" href="~/style/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="~/style/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
   <link rel="icon" asp-append-version="true" href="~/images/AppAntiPlagiatLogo.png" />
    <script src="~/js/site.js"></script>
+    @RenderSection("style",false)
 </head>
 <body class="hold-transition sidebar-mini layout-footer-fixed">
 <!-- Site wrapper -->
@@ -51,119 +54,123 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a  class="brand-link">
-      <img src="~/images/AppAntiPlagiatLogo.png"  class="brand-image img-circle elevation-3" style="opacity: .8">
-       <span class="brand-text font-weight-light">anti<b>Plagiat</b></span>
-    </a>
+        <aside class="main-sidebar sidebar-dark-primary elevation-4" id="showDashboards">
+            <!-- Brand Logo -->
+            <a class="brand-link">
+                <img src="~/images/AppAntiPlagiatLogo.png" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">anti<b>Plagiat</b></span>
+            </a>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="info">
-          <a href="#" class="d-block">ADMIN</a>
-        </div>
-      </div>
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="info">
+                        <a class="d-block">ADMIN</a>
+                    </div>
+                </div>
 
-      <!-- SidebarSearch Form -->
-      <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+                <!-- SidebarSearch Form -->
+                <div class="form-inline">
+                    <div class="input-group" data-widget="sidebar-search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-sidebar">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a asp-action="Dashboard" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              </p>
-            </a>
-          </li>
-           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
-              <p>
-                Gestion Enseignant
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a asp-action="AjouterEnseignant" class="nav-link">
-                  <i class="fas fa-user-plus nav-icon"></i>
-                  <p>Ajouter Enseignant</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a asp-action="RechSuppModEnseignant"  class="nav-link">
-                  <i class="fas fa-user-edit nav-icon"></i>
-                  <p>Rech + Supp + Mod</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user-graduate"></i>
-              <p>
-                Gestion Etudiant
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a asp-action="AjouterEtudiant" class="nav-link">
-                  <i class="fas fa-user-plus nav-icon"></i>
-                  <p>Ajouter Etudiant</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a asp-action="RechSuppModEtudiant"  class="nav-link">
-                  <i class="fas fa-user-edit nav-icon"></i>
-                  <p>Rech + Supp + Mod</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a asp-action="Affectation" class="nav-link">
-              <i class="nav-icon fas fa-people-arrows"></i>
-              <p>
-                Affectation
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a asp-action="Messages" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
-              <p>
-                Messages
-              </p>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                             with font-awesome or any other icon font library -->
+                        <li class="nav-item">
+                            <a href=@Url.Action("Dashboard") class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard 
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>
+                                    Gestion Enseignant
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href=@Url.Action("AjouterEnseignant") class="nav-link">
+                                        <i class="fas fa-user-plus nav-icon"></i>
+                                        <p>Ajouter Enseignant</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href=@Url.Action("RechSuppModEnseignant") class="nav-link">
+                                        <i class="fas fa-user-edit nav-icon"></i>
+                                        <p>Rech + Supp + Mod</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <i class="nav-icon fas fa-user-graduate"></i>
+                                <p>
+                                    Gestion Etudiant
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href=@Url.Action("AjouterEtudiant") class="nav-link">
+                                        <i class="fas fa-user-plus nav-icon"></i>
+                                        <p>Ajouter Etudiant</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href=@Url.Action("RechSuppModEtudiant") class="nav-link">
+                                        <i class="fas fa-user-edit nav-icon"></i>
+                                        <p>Rech + Supp + Mod</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href=@Url.Action("Affectation") class="nav-link">
+                                <i class="nav-icon fas fa-people-arrows"></i>
+                                <p>
+                                    Affectation
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href=@Url.Action("Messages") class="nav-link">
+                                <i class="nav-icon far fa-envelope"></i>
+                                <p>
+                                    Messages
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    @RenderBody()
+      <div id="main-content">
+            @RenderBody()
+      </div>
+    
   </div>
   <!-- /.content-wrapper -->
 
@@ -183,43 +190,16 @@
 
 <!-- jQuery -->
     <script src="~/style/plugins/jquery/jquery.min.js"></script>
+
 <!-- Bootstrap 4 -->
     <script src="~/style/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Theme scripts -->
     <script src="~/style/dist/js/adminlte.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="~/style/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <!-- Toastr -->
+    <script src="~/style/plugins/toastr/toastr.min.js"></script>
     <!-- Page specific script -->
-    <script>
-        $(function () {
-            //Enable check and uncheck all functionality
-            $('.checkbox-toggle').click(function () {
-                var clicks = $(this).data('clicks')
-                if (clicks) {
-                    //Uncheck all checkboxes
-                    $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
-                    $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
-                } else {
-                    //Check all checkboxes
-                    $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
-                    $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
-                }
-                $(this).data('clicks', !clicks)
-            })
-
-            //Handle starring for font awesome
-            $('.mailbox-star').click(function (e) {
-                e.preventDefault()
-                //detect type
-                var $this = $(this).find('a > i')
-                var fa = $this.hasClass('fa')
-
-                //Switch states
-                if (fa) {
-                    $this.toggleClass('fa-star')
-                    $this.toggleClass('fa-star-o')
-                }
-            })
-        })
-    </script>
-
+     @RenderSection("scripts",false)
 </body>
 </html>

@@ -14,6 +14,7 @@ namespace AppAntiPlagiat.ViewModels
         
         public string Subject { get; set; }
         [Required(ErrorMessage = "Veuillez écrire votre message.")]
+        [MinLength(45, ErrorMessage = "Le message doit dépasser 45 caractères.")]
         [MaxLength(350,ErrorMessage ="Le message ne pas dépasser 350 caractères.")]
         public string Message { get; set; }
     }

@@ -2,81 +2,283 @@
 @{
     ViewBag.Title = "Liste des enseignants";
 }
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Table de gestion des étudiants.</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Prénom</th>
-                                    <th>
-                                        Email
-                                    </th>
-                                    <th>
-                                        Département
-                                        <select class="table-filter" onchange="filter_rows()">
-                                            <option value="all" selected disabled >--tout--</option>
-                                        </select>
-                                    </th>
-                                    <th>
-                                        Modifications
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach(Utilisateur enseignant in Model)
-                                {
+<div id="partial-content-container">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Table de gestion des étudiants.</h3><br />
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            @enseignant.Nom
-                                        </td>
-                                        <td>
-                                            @enseignant.Prenom
-                                        </td>
-                                        <td>
-                                            @enseignant.Email
-                                        </td>
-                                        <td>
-                                            @enseignant.Departement
-                                        </td>
-                                        <td>
-                                            supprimer,modifier
-                                        </td>
+                                        <th>
+                                            <button type="button" title="Séléctionner tout" class="btn btn-default btn-sm checkbox-toggle">
+                                                <i class="far fa-square"></i>
+                                            </button>
+                                            <button type="button" id="delete-selected-button" title="Supprimer les séléctionnes" class="btn btn-default btn-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </th>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>
+                                            Email
+                                        </th>
+                                        <th>
+                                            Département
+                                            <select id="departement-filtre">
+                                                <option class="option">Génie Télécommunications & Réseaux</option>
+                                                <option class="option">Génie Sys. Embarqués & Info. Indus</option>
+                                                <option class="option">Génie Mécanique & Sys. Automatisés</option>
+                                                <option class="option">Génie énergétique et Sys. intelligents</option>
+                                                <option class="option" selected>tout</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            Modifications
+                                        </th>
                                     </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Prénom</th>
-                                    <th>
-                                        Email
-                                    </th>
-                                    <th>
-                                        Département
-
-                                    </th>
-                                    <th>
-                                        Modifications
-                                    </th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                         <script>
-                            getUniqueValuesFromColumn()
-                         </script>
+                                </thead>
+                                <tbody class="t_body">
+                                    @foreach (Utilisateur enseignant in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="icheck-primary">
+                                                    <input type="checkbox"  id="check1" value="@enseignant.Id" class="message-checkbox" >
+                                                    <label for="check1"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @enseignant.Nom
+                                            </td>
+                                            <td>
+                                                @enseignant.Prenom
+                                            </td>
+                                            <td>
+                                                @enseignant.Email
+                                            </td>
+                                            <td>
+                                                @enseignant.Departement
+                                            </td>
+                                            <td>
+                                                <a href="ModifyEnseignant?enseigId=@enseignant.Id" title="Modifier l'enseignant" class="btn btn-default btn-sm">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                                <button type="button" id="delete-button" value="@enseignant.Id" title="Supprimer l'enseignant" class="btn btn-default btn-sm">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>
+                                            <button type="button" title="Séléctionner tout" class="btn btn-default btn-sm checkbox-toggle">
+                                                <i class="far fa-square"></i>
+                                            </button>
+                                            <button type="button" id="delete-selected-button" title="Supprimer les séléctionnes" class="btn btn-default btn-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </th>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>
+                                            Email
+                                        </th>
+                                        <th>
+                                            Département
+                                            <select class="table-filter" onchange="filter_rows()">
+                                                <option value="all" selected disabled>--tout--</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            Modifications
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-body -->
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+</div>
+@section scripts{
+    <script>
+        $(function () {
+            //Enable check and uncheck all functionality
+            $('.checkbox-toggle').click(function () {
+                var clicks = $(this).data('clicks')
+                if (clicks) {
+                    //Uncheck all checkboxes
+                    $('.t_body input[type=\'checkbox\']').prop('checked', false)
+                    $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+                } else {
+                    //Check all checkboxes
+                    $('.t_body input[type=\'checkbox\']').prop('checked', true)
+                    $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+                }
+                $(this).data('clicks', !clicks)
+            })
+        })
+    </script>
+    <script>
+        //delete selected msgs
+        $(document).ready(function () {
+            $("#delete-selected-button").on("click", function () {
+                var confirmed = confirm("Voulez-vous vraiment supprimer les enseignants séléctionnés ?")
+                if (confirmed) {
+                    var selectedIds = $(".message-checkbox:checked").map(function () {
+                        return $(this).val();
+                    }).get();
+
+                    $.ajax({
+                        url: "/Admin/DeleteSelectedEnseignants",
+                        type: "POST",
+                        data: { enseignantIds: selectedIds },
+                        success: function (data) {
+                            // Handle success
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                }
+                else {
+                    var options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "2000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr.options = options;
+                    toastr.info('Opération annulée.');
+                }
+            });
+
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#delete-button").on("click", function () {
+                var confirmed = confirm("Voulez-vous vraiment supprimer cet enseignant ?")
+                if (confirmed) {
+                    var Id = $("#delete-button").map(function () {
+                        return $(this).val();
+                    }).get();
+
+                    $.ajax({
+                        url: "/Admin/DeleteEnseignant",
+                        type: "POST",
+                        data: { enseigId: Id },
+                        success: function (data) {
+
+                            window.location.href = 'RechSuppModEnseignant';
+
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                } else {
+                    var options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "2000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr.options = options;
+                    toastr.info('Opération annulée.');
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#departement-filtre").change(function () {
+                   
+                     var selectedOption = $(this).find("option:selected").text();
+                    $.ajax({
+                        url: "/Admin/FindByDepartement",
+                        type: "GET",
+                        data: { op: selectedOption },
+                        success: function (response) {
+                            
+                            $("#example1 tbody tr").remove();
+                            var rowsHtml = "";
+                             for (var i = 0; i < response.length; i++) {
+                                var row = response[i];
+                                console.log(response);
+                                 rowsHtml += "<tr>"+
+                                                "<td>"+
+                                                    "<div class=\"icheck-primary\">"+
+                                                        "<input type=\"checkbox\"  id=\"check1\" value=\""+row.id+"\" class=\"message-checkbox\">"+
+                                                        "<label for=\"check1\"></label>"+
+                                                    "</div>"+
+                                                "</td>"+
+                                                "<td>"+
+                                                    row.nom+
+                                                "</td>"+
+                                                "<td>"+
+                                                    row.prenom+
+                                                "</td>"+
+                                                "<td>"+
+                                                    row.email+
+                                                "</td>"+
+                                                "<td>"+
+                                                    row.departement+
+                                                "</td>"+
+                                                "<td>"+
+                                                    "<a href=\"ModifyEnseignant?enseigId="+row.id+"\" title=\"Modifier l'enseignant\" class=\"btn btn-default btn-sm\">"+
+                                                        "<i class=\"fas fa-pen\"></i>"+
+                                                    "</a>"+
+                                                    "<button type=\"button\" id=\"delete-button\" value=\""+row.id+"\" title=\"Supprimer l'enseignant\" class=\"btn btn-default btn-sm\">"+
+                                                        "<i class=\"far fa-trash-alt\"></i>"+
+                                                    "</button>"+
+                                                "</td>"+
+                                            "</tr>";
+                             }
+                            $("#example1 tbody").html(rowsHtml);
+                        },
+                        error: function (xhr, status, error) {
+                         console.log("Error: " + error);
+                        }
+                    });
+            });
+        });
+    </script>
+}

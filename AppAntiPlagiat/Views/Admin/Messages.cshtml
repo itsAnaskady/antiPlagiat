@@ -1,123 +1,185 @@
-﻿
+﻿@model IEnumerable<ListeMessagesViewModel>
 @{
     ViewBag.Title = "Messages";
 }
+<div id="partial-content-container">
+    <section class="content" style="padding : 2%">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Boite de réception</h3>
+               
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <div class="mailbox-controls">
+                    <!-- Check all button -->
+                    <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                        <i class="far fa-square"></i>
+                    </button>
+                    <div class="btn-group">
+                        <button type="button" id="delete-selected-button" class="btn btn-default">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="float-right">
+                        <div class="btn-group">
+                            @if (ViewBag.HasMoreMessages && ViewBag.Page != 1)
+                            {
+                                <a href="Messages?page=@(ViewBag.Page - 1)"><i class="fas fa-chevron-left"></i></a>
+                            }
+                            &nbsp;
 
-<section class="content">
-    <div class="card card-primary card-outline">
-        <div class="card-header">
-            <h3 class="card-title">Inbox</h3>
-
-            <div class="card-tools">
-                <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" placeholder="Search Mail">
-                    <div class="input-group-append">
-                        <div class="btn btn-primary">
-                            <i class="fas fa-search"></i>
+                            @(ViewBag.Page * 25 - 24)-@(ViewBag.Page * 25)/@(ViewBag.TotalMessageCount)
+                            &nbsp;
+                            @if (ViewBag.HasMoreMessages && ViewBag.Page != ViewBag.TotalMessageCount / 25)
+                            {
+                                <a href="Messages?page=@(ViewBag.Page + 1)"><i class="fas fa-chevron-right"></i></a>
+                            }
                         </div>
+                        <!-- /.btn-group -->
                     </div>
+                    <!-- /.float-right -->
                 </div>
+                <div class="table-responsive mailbox-messages">
+                    <table class="table table-hover table-striped">
+                        <tbody id="inbox-container">
+                            @foreach(var msg in Model)
+                            {
+                                <tr >
+                                    <td>
+                                        <div class="icheck-primary">
+                                            <input type="checkbox" value="@msg.Id" id="check1" class="message-checkbox" >
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td class="mailbox-name"><a href="ReadMessage?currentMsgId=@msg.Id">@msg.Emetteur</a></td>
+                                    <td class="mailbox-subject">
+                                        <b>@msg.Subject</b> - @msg.Msg.......
+                                    </td>
+                                    <td class="mailbox-attachment"></td>
+                                    <td class="mailbox-date">@msg.tempsPasse</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <!-- /.table -->
+                </div>
+                <!-- /.mail-box-messages -->
             </div>
-            <!-- /.card-tools -->
-        </div>
-        <!-- /.card-header -->
-        <div class="card-body p-0">
-            <div class="mailbox-controls">
-                <!-- Check all button -->
-                <button type="button" class="btn btn-default btn-sm checkbox-toggle">
-                    <i class="far fa-square"></i>
-                </button>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="far fa-trash-alt"></i>
+            <!-- /.card-body -->
+            <div class="card-footer p-0">
+                <div class="mailbox-controls">
+                    <!-- Check all button -->
+                    <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                        <i class="far fa-square"></i>
                     </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-reply"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-share"></i>
-                    </button>
-                </div>
-                <!-- /.btn-group -->
-                <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-                <div class="float-right">
-                    1-50/200
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm">
-                            <i class="fas fa-chevron-left"></i>
+                        <button type="button" id="delete-selected-button" class="btn btn-default">
+                            <i class="far fa-trash-alt"></i>
                         </button>
                         <button type="button" class="btn btn-default btn-sm">
-                            <i class="fas fa-chevron-right"></i>
+                            <i class="fas fa-sync-alt"></i>
                         </button>
                     </div>
                     <!-- /.btn-group -->
-                </div>
-                <!-- /.float-right -->
-            </div>
-            <div class="table-responsive mailbox-messages">
-                <table class="table table-hover table-striped">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="icheck-primary">
-                                    <input type="checkbox" value="" id="check1">
-                                    <label for="check1"></label>
-                                </div>
-                            </td>
-                            <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
-                            <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                            <td class="mailbox-subject">
-                                <b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                            </td>
-                            <td class="mailbox-attachment"></td>
-                            <td class="mailbox-date">5 mins ago</td>
-                        </tr>
-                       
-                    </tbody>
-                </table>
-                <!-- /.table -->
-            </div>
-            <!-- /.mail-box-messages -->
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer p-0">
-            <div class="mailbox-controls">
-                <!-- Check all button -->
-                <button type="button" class="btn btn-default btn-sm checkbox-toggle">
-                    <i class="far fa-square"></i>
-                </button>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="far fa-trash-alt"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-reply"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-share"></i>
-                    </button>
-                </div>
-                <!-- /.btn-group -->
-                <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-                <div class="float-right">
-                    1-50/200
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button type="button" class="btn btn-default btn-sm">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                
+                    <div class="float-right">
+                        <div class="btn-group">
+                            @if (ViewBag.HasMoreMessages && ViewBag.Page != 1)
+                            {
+                                <a href="Messages?page=@(ViewBag.Page - 1)"><i class="fas fa-chevron-left"></i></a>
+                            }
+                            &nbsp;
+                        
+                            @(ViewBag.Page * 25 - 24)-@(ViewBag.Page * 25)/@(ViewBag.TotalMessageCount)
+                            &nbsp;
+                            @if (ViewBag.HasMoreMessages && ViewBag.Page !=  ViewBag.TotalMessageCount / 25)
+                            {
+                                <a href="Messages?page=@(ViewBag.Page + 1)"><i class="fas fa-chevron-right"></i></a>
+                            }
+                        </div>
+                        <!-- /.btn-group -->
                     </div>
-                    <!-- /.btn-group -->
+                    <!-- /.float-right -->
                 </div>
-                <!-- /.float-right -->
             </div>
         </div>
-    </div>
-    <!-- /.card -->
-</section>
+    
+        <!-- /.card -->
+    </section>
+</div>
+@section scripts{
+    <script>
+        $(function () {
+            //Enable check and uncheck all functionality
+            $('.checkbox-toggle').click(function () {
+                var clicks = $(this).data('clicks')
+                if (clicks) {
+                    //Uncheck all checkboxes
+                    $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
+                    $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+                } else {
+                    //Check all checkboxes
+                    $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
+                    $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+                }
+                $(this).data('clicks', !clicks)
+            })
+        })
+    </script>
+    <script>
+        //delete selected msgs
+        $(document).ready(function () {
+            $("#delete-selected-button").on("click", function () {
+                var confirmed = confirm("Voulez-vous vraiment supprimer ces messages ?")
+                if(confirmed){
+                    var selectedIds = $(".message-checkbox:checked").map(function () {
+                        return $(this).val();
+                    }).get();
+                    
+
+                    $.ajax({
+                        url: "/Admin/DeleteSelectedMessages",
+                        type: "POST",
+                        data: { messageIds: selectedIds },
+                        success: function (data) {
+                            // Handle success
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                }
+                else
+                {
+                     var options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "2000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr.options = options;
+                    toastr.info('Opération annulée.');
+                }
+            });
+            
+        });
+    </script>
+    
+}
