@@ -52,7 +52,7 @@ namespace AppAntiPlagiat.Controllers
                 var result = await userManager.CreateAsync(nvEnseignant, model.Password);
 
                 //add user to role
-                var result1 = await userManager.AddToRoleAsync(await userManager.FindByEmailAsync(model.Email), "enseignant");
+                var result1 = await userManager.AddToRoleAsync(nvEnseignant, "enseignant");
 
                 if (result.Succeeded && result1.Succeeded)
                 {
@@ -85,7 +85,7 @@ namespace AppAntiPlagiat.Controllers
             ViewBag.Ltype = "admin";
             if (ModelState.IsValid)
             {
-                Utilisateur nvEnseignant = new Utilisateur
+                Utilisateur nvEtudiant = new Utilisateur
                 {
                     Email = model.Email,
                     Nom = model.Nom,
@@ -99,10 +99,10 @@ namespace AppAntiPlagiat.Controllers
                     CNE = model.CNE 
                 };
                 //add user
-                var result = await userManager.CreateAsync(nvEnseignant, model.Password);
+                var result = await userManager.CreateAsync(nvEtudiant, model.Password);
 
                 //add user to role
-                var result1 = await userManager.AddToRoleAsync(await userManager.FindByEmailAsync(model.Email), "etudiant");
+                var result1 = await userManager.AddToRoleAsync(nvEtudiant, "etudiant");
 
                 if (result.Succeeded && result1.Succeeded)
                 {
@@ -181,6 +181,23 @@ namespace AppAntiPlagiat.Controllers
             return RedirectToAction("Messages");
         }
         [HttpPost]
+        public IActionResult DeleteSelectedEtudiants(string[] etudiantIds)
+        {
+            // Delete the selected messages from the database
+            if (etudiantIds.Length != 0)
+            {
+                foreach (var Id in etudiantIds)
+                {
+                    var etudiant = applicationDbContext.Utilisateurs.Find(Id);
+                    applicationDbContext.Utilisateurs.Remove(etudiant);
+                }
+                applicationDbContext.SaveChanges();
+            }
+
+            // Redirect to the inbox page
+            return RedirectToAction("RechSuppModEtudiant");
+        }
+        [HttpPost]
         public IActionResult DeleteSelectedEnseignants(string[] enseignantIds)
         {
             // Delete the selected messages from the database
@@ -207,9 +224,43 @@ namespace AppAntiPlagiat.Controllers
            
             return RedirectToAction("RechSuppModEnseignant");
         }
+        [HttpPost]
+        public IActionResult DeleteEtudiant(string etudId)
+        {
+            var etudiant = applicationDbContext.Utilisateurs.Find(etudId);
+            if (etudiant != null)
+            {
+                applicationDbContext.Utilisateurs.Remove(etudiant);
+                applicationDbContext.SaveChanges();
+            }
 
+            return RedirectToAction("RechSuppModEtudiant");
+        }
 
-        
+        [HttpGet]
+        public async Task<JsonResult> FiltrerEtudiant(string filiere , string nv)
+        {
+            if (filiere == "tout" && nv == "tout")
+            {
+                var users = await userManager.GetUsersInRoleAsync("etudiant");
+                return Json(users);
+            }
+            else if (filiere == "tout" && nv != "tout")
+            {
+                var users = applicationDbContext.Utilisateurs.Where(x => x.Niveau == nv).ToList();
+                return Json(users);
+            }
+            else if (filiere != "tout" && nv == "tout")
+            {
+                var users = applicationDbContext.Utilisateurs.Where(x => x.Filiere == filiere).ToList();
+                return Json(users);
+            }
+            else {
+                var users = applicationDbContext.Utilisateurs.Where(x => x.Filiere == filiere && x.Niveau == nv).ToList();
+                return Json(users);
+            }
+        }
+
         public IActionResult ModifyEnseignant(string enseigId)
         {
             ViewBag.Ltype = "admin";
@@ -352,7 +403,7 @@ namespace AppAntiPlagiat.Controllers
         }
 
         [HttpGet]
-        public JsonResult FindByDepartement(string op)
+        public async Task<JsonResult> FindByDepartement(string op)
         {
             if (op != "tout") {
                 var users = applicationDbContext.Utilisateurs.Where(x => x.Departement == op).ToList();
@@ -360,7 +411,7 @@ namespace AppAntiPlagiat.Controllers
             }
             else
             {
-                var users = applicationDbContext.Utilisateurs.ToList();
+                var users = await userManager.GetUsersInRoleAsync("enseignant");
                 return Json(users);
             }
         }

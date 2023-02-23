@@ -1,5 +1,4 @@
-﻿
-@model IEnumerable<Utilisateur>
+﻿@model IEnumerable<Utilisateur>
 @{
     ViewBag.Title = "Liste des étudiants";
 }
@@ -17,19 +16,36 @@
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th>
+                                            <button type="button" title="Séléctionner tout" class="btn btn-default btn-sm checkbox-toggle">
+                                                <i class="far fa-square"></i>
+                                            </button>
+                                            <button type="button" id="delete-selected-button" title="Supprimer les séléctionnes" class="btn btn-default btn-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </th>
                                         <th>Nom</th>
                                         <th>Prénom</th>
                                         <th>CNE</th>
                                         <th>
                                             Filière
-                                            <select class="table-filter" onchange="filter_rows()">
-                                                <option value="all" selected disabled >--tout--</option>
+                                            <select class="filtre_etudiant" id="menu1">
+                                                <option value="tout" selected >tout</option>
+                                                <option value="INFO">INFO</option>
+                                                <option value="INDUS">INDUS</option>
+                                                <option value="GMSA">GMSA</option>
+                                                <option value="GESI">GESI</option>
+                                                <option value="GTR">GTR</option>
+                                                <option value="SEII">SEII</option>
                                             </select>
                                         </th>
                                         <th>
                                             Niveau
-                                            <select class="table-filter" onchange="filter_rows()">
-                                                <option value="all" selected disabled>--tout--</option>
+                                            <select class="filtre_etudiant" id="menu2">
+                                                <option selected>tout</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
                                             </select>
                                         </th>
                                         <th>
@@ -41,10 +57,16 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="t_body">
                                     @foreach(Utilisateur etudiant in Model)
                                     {
                                         <tr>
+                                            <td>
+                                                <div class="icheck-primary">
+                                                    <input type="checkbox" id="check1" value="@etudiant.Id" class="message-checkbox">
+                                                    <label for="check1"></label>
+                                                </div>
+                                            </td>
                                             <td>
                                                 @etudiant.Nom
                                             </td>
@@ -67,13 +89,26 @@
                                                 Rapports
                                             </td>
                                             <td>
-                                                supprimer,modifier
+                                                <a href="ModifyEnseignant?enseigId=@etudiant.Id" title="Modifier l'étudiant" class="btn btn-default btn-sm">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                                <button type="button" id="delete-button" value="@etudiant.Id" title="Supprimer l'étudiant" class="btn btn-default btn-sm">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     }
                                 </tbody>
                                 <tfoot>
                                     <tr>
+                                        <th>
+                                            <button type="button" title="Séléctionner tout" class="btn btn-default btn-sm checkbox-toggle">
+                                                <i class="far fa-square"></i>
+                                            </button>
+                                            <button type="button" id="delete-selected-button" title="Supprimer les séléctionnes" class="btn btn-default btn-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </th>
                                         <th>Nom</th>
                                         <th>Prénom</th>
                                         <th>CNE</th>
@@ -89,9 +124,7 @@
                                     </tr>
                                 </tfoot>
                             </table>
-                             <script>
-                                getUniqueValuesFromColumn()
-                             </script>
+                             
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -100,3 +133,177 @@
         </div>
     </section>
 </div>
+@section scripts{
+    <script>
+        $(function () {
+            //Enable check and uncheck all functionality
+            $('.checkbox-toggle').click(function () {
+                var clicks = $(this).data('clicks')
+                if (clicks) {
+                    //Uncheck all checkboxes
+                    $('.t_body input[type=\'checkbox\']').prop('checked', false)
+                    $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+                } else {
+                    //Check all checkboxes
+                    $('.t_body input[type=\'checkbox\']').prop('checked', true)
+                    $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+                }
+                $(this).data('clicks', !clicks)
+            })
+        })
+    </script>
+    <script>
+        //delete selected msgs
+        $(document).ready(function () {
+            $("#delete-selected-button").on("click", function () {
+                var confirmed = confirm("Voulez-vous vraiment supprimer les étudiants séléctionnés ?")
+                if (confirmed) {
+                    var selectedIds = $(".message-checkbox:checked").map(function () {
+                        return $(this).val();
+                    }).get();
+
+                    $.ajax({
+                        url: "/Admin/DeleteSelectedEtudiants",
+                        type: "POST",
+                        data: { etudiantIds: selectedIds },
+                        success: function (data) {
+                            // Handle success
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                }
+                else {
+                    var options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "2000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr.options = options;
+                    toastr.info('Opération annulée.');
+                }
+            });
+
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#delete-button").on("click", function () {
+                var confirmed = confirm("Voulez-vous vraiment supprimer cet étudiant ?")
+                if (confirmed) {
+                    var Id = $("#delete-button").map(function () {
+                        return $(this).val();
+                    }).get();
+
+                    $.ajax({
+                        url: "/Admin/DeleteEtudiant",
+                        type: "POST",
+                        data: { etudId: Id },
+                        success: function (data) {
+
+                            location.reload();
+
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                } else {
+                    var options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "2000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr.options = options;
+                    toastr.info('Opération annulée.');
+                }
+            });
+        });
+    </script>
+    <script>
+    $(document).ready(function () {
+        $(".filtre_etudiant").change(function () {
+            var Filiere = $('#menu1').val();
+            var nv = $('#menu2').val();
+            $.ajax({
+                url: "/Admin/FiltrerEtudiant?filiere=" + encodeURIComponent(Filiere) + "&nv=" + encodeURIComponent(nv),
+                type: "GET",
+                success: function (response) {
+                    $("#example1 tbody tr").remove();
+                        var rowsHtml = "";
+                        for (var i = 0; i < response.length; i++) {
+                            var row = response[i];
+                            rowsHtml += "<tr>"+
+                                            "<td>"+
+                                                "<div class=\"icheck-primary\">"+
+                                                    "<input type=\"checkbox\" id=\"check1\" value=\""+row.id+"\" class=\"message-checkbox\">"+
+                                                    "<label for=\"check1\"></label>"+
+                                                "</div>"+
+                                            "</td>"+
+                                            "<td>"+
+                                                row.nom+
+                                            "</td>"+
+                                            "<td>"+
+                                                row.prenom+
+                                            "</td>"+
+                                            "<td>"+
+                                                row.cne+
+                                            "</td>"+
+                                            "<td>"+
+                                                row.filiere+
+                                            "</td>"+
+                                            "<td>"+
+                                                row.niveau+
+                                            "</td>"+
+                                            "<td>"+
+                                                row.email+
+                                            "</td>"+
+                                            "<td>"+
+                                                "Rapports"+
+                                            "</td>"+
+                                            "<td>"+
+                                                "<a href=\"ModifyEnseignant?enseigId="+row.id+"\" title=\"Modifier l'étudiant\" class=\"btn btn-default btn-sm\">"+
+                                                    "<i class=\"fas fa-pen\"></i>"+
+                                                "</a>"+
+                                                "<button type=\"button\" id=\"delete-button\" value=\""+row.id+"\" title=\"Supprimer l'étudiant\" class=\"btn btn-default btn-sm\">"+
+                                                    "<i class=\"far fa-trash-alt\"></i>"+
+                                                "</button>"+
+                                            "</td>"+
+                                        "</tr>"
+                        }
+                        $("#example1 tbody").html(rowsHtml);
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error: " + error);
+                }
+            });
+        });
+    });
+    </script>
+}
