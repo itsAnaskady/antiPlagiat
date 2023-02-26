@@ -89,12 +89,14 @@
                                                 Rapports
                                             </td>
                                             <td>
-                                                <a href="ModifyEnseignant?enseigId=@etudiant.Id" title="Modifier l'étudiant" class="btn btn-default btn-sm">
+                                                <a href="ModifyEtud?etudId=@etudiant.Id" title="Modifier l'étudiant" class="btn btn-default btn-sm">
                                                     <i class="fas fa-pen"></i>
                                                 </a>
-                                                <button type="button" id="delete-button" value="@etudiant.Id" title="Supprimer l'étudiant" class="btn btn-default btn-sm">
+                                                
+                                                <button type="button" value="@etudiant.Id" title="Supprimer l'étudiant" class="delete-button btn btn-default btn-sm">
                                                     <i class="far fa-trash-alt"></i>
                                                 </button>
+                                                
                                             </td>
                                         </tr>
                                     }
@@ -202,13 +204,11 @@
     </script>
     <script>
         $(document).ready(function () {
-            $("#delete-button").on("click", function () {
+            $(".delete-button").on("click", function () {
                 var confirmed = confirm("Voulez-vous vraiment supprimer cet étudiant ?")
                 if (confirmed) {
-                    var Id = $("#delete-button").map(function () {
-                        return $(this).val();
-                    }).get();
-
+                    var Id = $(this).val();
+                    
                     $.ajax({
                         url: "/Admin/DeleteEtudiant",
                         type: "POST",

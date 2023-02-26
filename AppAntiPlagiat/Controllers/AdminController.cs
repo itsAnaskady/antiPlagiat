@@ -296,6 +296,45 @@ namespace AppAntiPlagiat.Controllers
             
             return RedirectToAction("RechSuppModEnseignant");
         }
+        public IActionResult ModifyEtud(string etudId)
+        {
+            ViewBag.Ltype = "admin";
+            var etudiant = applicationDbContext.Utilisateurs.Find(etudId);
+            if (etudiant != null)
+            {
+                ModifierEtudiantViewModel model = new ModifierEtudiantViewModel()
+                {
+                    Filiere = etudiant.Filiere,
+                    Email = etudiant.Email,
+                    Niveau = etudiant.Niveau,
+                    CNE = etudiant.CNE,
+                    Id = etudiant.Id,
+                    Nom = etudiant.Nom,
+                    Prenom = etudiant.Prenom
+                };
+                return View(model);
+            }
+            return RedirectToAction("RechSuppModEtudiant");
+        }
+        [HttpPost]
+        public IActionResult ModifyEtud(ModifierEtudiantViewModel model)
+        {
+            var etudiant = applicationDbContext.Utilisateurs.Find(model.Id);
+            if (etudiant != null)
+            {
+                etudiant.Email = model.Email;
+                etudiant.UserName = model.Email;
+                etudiant.NormalizedEmail = model.Email.ToUpper();
+                etudiant.Filiere = model.Filiere;
+                etudiant.CNE = model.CNE;
+                etudiant.Prenom = model.Prenom;
+                etudiant.Nom = model.Nom;
+                applicationDbContext.SaveChanges();
+            }
+
+
+            return RedirectToAction("RechSuppModEtudiant");
+        }
         [HttpPost]
         public IActionResult DeleteMessage(int Id)
         {
