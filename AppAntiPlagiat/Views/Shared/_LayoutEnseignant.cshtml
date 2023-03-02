@@ -1,4 +1,6 @@
-﻿@model UserViewModel
+﻿@inject ApplicationDbContext dbContext
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,6 +15,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="~/style/dist/css/adminlte.min.css">
     <link rel="icon" asp-append-version="true" href="~/images/AppAntiPlagiatLogo.png" />
+    @RenderSection("style",false)
 </head>
 <body class="hold-transition sidebar-mini layout-footer-fixed">
 <!-- Site wrapper -->
@@ -58,7 +61,7 @@
               <img src="~/images/Users/NewUser.png" class="img-circle elevation-2" alt="User Image">
           </div>
         <div class="info">
-          <a asp-action="Profile" class="d-block">Nom Prénom</a>
+              <a asp-action="Profile" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom </a>
         </div>
       </div>
 
@@ -122,6 +125,6 @@
     <script src="~/style/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Theme scripts -->
     <script src="~/style/dist/js/adminlte.min.js"></script>
-
+    @RenderSection("scripts",false)
 </body>
 </html>

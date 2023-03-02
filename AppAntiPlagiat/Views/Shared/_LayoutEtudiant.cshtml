@@ -1,4 +1,4 @@
-﻿@model UserViewModel
+﻿@inject ApplicationDbContext dbContext
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -57,7 +57,7 @@
                         <img src="" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a asp-action="Profile" class="d-block">Nom Prénom</a>
+                        <a asp-action="Profile" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom</a>
                     </div>
                 </div>
 

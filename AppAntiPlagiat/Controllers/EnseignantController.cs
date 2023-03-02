@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AppAntiPlagiat.Controllers
 {
-    [Authorize(Roles = "enseignant")]
+    //[Authorize(Roles = "enseignant")]
     public class EnseignantController : Controller
     {
         private readonly UserManager<Utilisateur> userManager;
