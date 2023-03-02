@@ -2,29 +2,110 @@
 @{
     ViewBag.Title = "Profile";
 }
-<div class="card card-primary card-outline">
-    <div class="card-body box-profile">
-        <div class="text-center">
-            <img class="profile-user-img img-fluid img-circle"
-                 asp-append-version="true"
-                 src="@Model.IMGurl"
-                 alt="img description"
-                 >
+<div id="partial-content-container">
+    <section class="content" style="padding : 2%">
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <div class="image-container">
+                        <img class="profile-user-img img-fluid img-circle" src="@Model.IMGurl" alt="img description">
+                        <div class="edit-icon"><i class="fas fa-pencil-alt"></i></div>
+                        <input type="file" style="display:none" id="uploadImage">
+                    </div>
+                </div>
+
+                <h3 class="profile-username text-center">@Model.Nom @Model.Prenom</h3>
+
+                <p class="text-muted text-center">Bio</p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Address Email</b> <a class="float-right">@Model.Email</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Département</b> <a class="float-right">@Model.Departement</a>
+                    </li>
+                </ul>
+
+            </div>
+            <!-- /.card-body -->
         </div>
-
-        <h3 class="profile-username text-center">@Model.Nom @Model.Prenom</h3>
-
-        <p class="text-muted text-center">Bio</p>
-
-        <ul class="list-group list-group-unbordered mb-3">
-            <li class="list-group-item">
-                <b>Address Email</b> <a class="float-right">@Model.Email</a>
-            </li>
-            <li class="list-group-item">
-                <b>Département</b> <a class="float-right">@Model.Departement</a>
-            </li>
-        </ul>
-
-    </div>
-    <!-- /.card-body -->
+    </section>
 </div>
+@section style{
+    <style>
+        .image-container {
+            position: relative;
+        }
+
+            .image-container:hover img {
+                filter: brightness(70%) saturate(80%);
+            }
+
+        .edit-icon {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.5;
+        }
+
+        .image-container:hover .edit-icon {
+            opacity: 1;
+        }
+
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('.image-container').hover(
+                function () {
+                    $(this).find('.edit-icon').fadeIn(200);
+                },
+                function () {
+                    $(this).find('.edit-icon').fadeOut(200);
+                }
+            );
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.image-container').on('click', function () {
+                $('#uploadImage').click();
+            });
+
+            $('#uploadImage').on('change', function (e) {
+                var file = e.target.files[0];
+                var reader = new FileReader();
+
+                reader.onload = function () {
+                    var data = new FormData();
+                    data.append('image', file);
+
+                    $.ajax({
+                        url: 'Ens/upload',
+                        type: 'POST',
+                        data: data,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            var imageUrl = response.imageUrl;
+                            $('.profile-user-img').attr('src', imageUrl);
+                            // Update @Model.IMGurl with the new image URL
+                            // e.g. @Model.IMGurl = imageUrl;
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(xhr.responseText);
+                        }
+                    });
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+    </script>
+}
+

@@ -70,7 +70,7 @@
                                                 <a href="ModifyEnseignant?enseigId=@enseignant.Id" title="Modifier l'enseignant" class="btn btn-default btn-sm">
                                                     <i class="fas fa-pen"></i>
                                                 </a>
-                                                <button type="button" id="delete-button" value="@enseignant.Id" title="Supprimer l'enseignant" class="btn btn-default btn-sm">
+                                                <button type="button" value="@enseignant.Id" title="Supprimer l'enseignant" class="delete-button btn btn-default btn-sm">
                                                     <i class="far fa-trash-alt"></i>
                                                 </button>
                                             </td>
@@ -94,9 +94,6 @@
                                         </th>
                                         <th>
                                             Département
-                                            <select class="table-filter" onchange="filter_rows()">
-                                                <option value="all" selected disabled>--tout--</option>
-                                            </select>
                                         </th>
                                         <th>
                                             Modifications
@@ -183,12 +180,10 @@
     </script>
     <script>
         $(document).ready(function () {
-            $("#delete-button").on("click", function () {
+            $(".delete-button").on("click", function () {
                 var confirmed = confirm("Voulez-vous vraiment supprimer cet enseignant ?")
                 if (confirmed) {
-                    var Id = $("#delete-button").map(function () {
-                        return $(this).val();
-                    }).get();
+                    var Id = $(this).val();
 
                     $.ajax({
                         url: "/Admin/DeleteEnseignant",
@@ -242,7 +237,6 @@
                             var rowsHtml = "";
                              for (var i = 0; i < response.length; i++) {
                                 var row = response[i];
-                                console.log(response);
                                  rowsHtml += "<tr>"+
                                                 "<td>"+
                                                     "<div class=\"icheck-primary\">"+
