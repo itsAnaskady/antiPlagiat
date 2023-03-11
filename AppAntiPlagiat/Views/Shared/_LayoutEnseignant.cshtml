@@ -58,7 +58,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-              <img src="~/images/Users/NewUser.png" class="img-circle elevation-2" alt="User Image">
+              <img asp-append-version="true" src="@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).IMGurl" class="img-circle elevation-2" alt="User Image">
           </div>
         <div class="info">
               <a asp-action="Profile" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom </a>

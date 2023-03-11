@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AppAntiPlagiat.Controllers
 {
-    [Authorize(Roles = "etudiant")]
+    //[Authorize(Roles = "etudiant")]
     public class EtudiantController : Controller
     {
         public IActionResult Profile()
