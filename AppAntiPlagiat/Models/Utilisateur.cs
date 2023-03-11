@@ -17,7 +17,7 @@ namespace AppAntiPlagiat.Models
         public string? Departement { get; set; }
 
         public string? Filiere { get; set; }
-
+        public string NomComplet { get { return Nom + " " + Prenom; } }
         public ICollection<Rapport> Rapports { get; set; }
         public ICollection<Encadre> Encadres { get; set; }
     }

@@ -10,7 +10,7 @@ namespace AppAntiPlagiat.Models
         public DbSet<Utilisateur> Utilisateurs { get; set; }
         public DbSet<Rapport> Rapports { get; set; }
         public DbSet<Message> Messages { get; set; }
-
+        public DbSet<Encadre> Encadre { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Rapport>()

@@ -1,7 +1,97 @@
-﻿
+﻿@model List<Encadre>
 @{
     ViewBag.Title = "Affectation";
 }
-<div id="partial-content-container">
-<h1>Affectation</h1>
-</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bg-primary bg-light text-dark text-center py-3 ">
+                <h2>Bienvenue sur la page d'affectation des étudiants aux encadrants !</h2>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            </div>
+        </div>
+    }
+    @if (TempData["SuccesMessage"] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success">@TempData["SuccesMessage"]</div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" action="@Url.Action("AffecterEncadrement", "Admin")">
+               <div class="form-group">
+                    <label for="EtudiantId">Sélectionner un étudiant :</label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("EtudiantId", ViewBag.EtudiantList as SelectList, "Sélectionner un étudiant", new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="EnseignantId">Sélectionner un encadrant :</label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("EnseignantId", ViewBag.EnseignantList as SelectList, "Sélectionner un enseignant", new { @class = "form-control" })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="select-niveau">Sélectionner un niveau :</label>
+                    <select class="form-control" id="select-niveau">
+                        <option>Niveau 1</option>
+                        <option>Niveau 2</option>
+                        <option>Niveau 3</option>
+                    </select>
+                </div>
+
+                  <div class="form-group">
+                    <label for="TypeStage">Sélectionner le type de stage :</label>
+                    <select class="form-control" id="TypeStage" name="TypeStage">
+                        <option>Initiation</option>
+                        <option>PFA</option>
+                        <option>PFE</option>
+                    </select>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-12">
+
+                        <button type="submit" class="btn btn-primary btn-block" id="btn-affecter">Affecter</button>
+           </div>
+           </div>
+            </form>
+        </div>
+        
+
+@section Scripts{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("#EtudiantId").chosen();
+            $("#EnseignantId").chosen();
+
+        });
+
+    </script>
+    
+}
+
+
+
+
+  

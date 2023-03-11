@@ -2,3 +2,46 @@
 @{
     ViewBag.Title = "Vos rapports";
 }
+@model List<Rapport>
+
+@{
+    ViewBag.Title = "Mes rapports";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bg-primary bg-light text-dark text-center py-3 ">
+                <h2> Mes Rapports:</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Count == 0)
+{
+    <p>Aucun rapport n'a été déposé.</p>
+}
+else
+{
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nom de fichier</th>
+                <th>Type de stage</th>
+                <th>Date de dépôt</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rapport in Model)
+            {
+                <tr>
+                    <td>@rapport.Intitulé</td>
+                    <td>@rapport.Type</td>
+                    <td>@rapport.DateDepot</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
