@@ -1,4 +1,38 @@
-﻿
+﻿@model Tuple<List<Utilisateur>, List<string>>
 @{
     ViewBag.Title = "Liste des enseignants";
 }
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bg-primary bg-light text-dark text-center py-3 ">
+                <h1>Les encadrants affectés selon le type de stage:</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nom de l'enseignant</th>
+                        <th>Type de stage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var enseignant in Model.Item1)
+                    {
+                        var typeStage = Model.Item2[Model.Item1.IndexOf(enseignant)];
+                        <tr>
+                            <td><strong>@enseignant.Nom @enseignant.Prenom</strong></td>
+                            <td><strong>@typeStage</strong></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
