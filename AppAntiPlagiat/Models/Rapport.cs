@@ -15,6 +15,9 @@ namespace AppAntiPlagiat.Models
         public string Chemin { get; set; }
         public string EtudiantId { get; set; }
         public DateTime DateDepot;
-        public Utilisateur Etudiant { get; set; }
+      public Utilisateur Etudiant { get; set; }
+        public Utilisateur Enseignant { get; set; }
+       // public string EnseignantID { get; set; }
+       
     }
 }

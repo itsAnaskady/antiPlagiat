@@ -57,7 +57,7 @@
                         <img src="" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a asp-action="Profile" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom</a>
+                        <a href=@Url.Action("Profile") class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom</a>
                     </div>
                 </div>
 
@@ -88,6 +88,7 @@
                                 </p>
                             </a>
                         </li>
+                        
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-download"></i>

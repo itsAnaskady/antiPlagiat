@@ -17,8 +17,8 @@ namespace AppAntiPlagiat.Models
                 .HasOne(o => o.Etudiant)
                 .WithMany(c => c.Rapports)
                 .HasForeignKey(o => o.EtudiantId);
-            
-           
+
+
 
             builder.Entity<Encadre>()
                 .HasOne(er => er.Etudiant)

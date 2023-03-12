@@ -3,7 +3,7 @@
     ViewBag.Title = "Affectation";
 }
 
-<div class="container">
+<div class="container" style="margin-left: 20px;">
     <div class="row">
         <div class="col-md-12">
             <div class="bg-primary bg-light text-dark text-center py-3 ">
@@ -11,8 +11,14 @@
             </div>
         </div>
     </div>
+ </div>
+<div class="form-group row">
+    <div class="col-md-12">
+        @Html.ActionLink("pour une Affectation Alléatoire Cliquez ici", "AffectationAlleatoire", "Admin", null, new { @class ="btn" , style = "background-color: black; color: white;",@onmouseover="this.style.backgroundColor='red'", @onmouseout="this.style.backgroundColor='blue'" })
     </div>
-    
+</div>
+
+
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="row">
@@ -30,52 +36,52 @@
         </div>
     }
 
-    <div class="row">
-        <div class="col-md-6">
-            <form method="post" action="@Url.Action("AffecterEncadrement", "Admin")">
-               <div class="form-group">
-                    <label for="EtudiantId">Sélectionner un étudiant :</label>
-                    <div class="col-md-10">
-                        @Html.DropDownList("EtudiantId", ViewBag.EtudiantList as SelectList, "Sélectionner un étudiant", new { @class = "form-control" })
-                    </div>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"></h5>
+        <form method="post" action="@Url.Action("AffecterEncadrement", "Admin")">
+            <div class="form-group">
+                <label for="EtudiantId">Sélectionner un étudiant :</label>
+                <div class="col-md-10">
+                    @Html.DropDownList("EtudiantId", ViewBag.EtudiantList as SelectList, "Sélectionner un étudiant", new { @class = "form-control" })
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="EnseignantId">Sélectionner un encadrant :</label>
-                    <div class="col-md-10">
-                        @Html.DropDownList("EnseignantId", ViewBag.EnseignantList as SelectList, "Sélectionner un enseignant", new { @class = "form-control" })
-                    </div>
+            <div class="form-group">
+                <label for="EnseignantId">Sélectionner un encadrant :</label>
+                <div class="col-md-10">
+                    @Html.DropDownList("EnseignantId", ViewBag.EnseignantList as SelectList, "Sélectionner un enseignant", new { @class = "form-control" })
                 </div>
+            </div>
 
+            <div class="form-group">
+                <label for="select-niveau">Sélectionner un niveau :</label>
+                <select class="form-control" id="select-niveau">
+                    <option>Niveau 1</option>
+                    <option>Niveau 2</option>
+                    <option>Niveau 3</option>
+                </select>
+            </div>
 
+            <div class="form-group">
+                <label for="TypeStage">Sélectionner le type de stage :</label>
+                <select class="form-control" id="TypeStage" name="TypeStage">
+                    <option>Initiation</option>
+                    <option>PFA</option>
+                    <option>PFE</option>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label for="select-niveau">Sélectionner un niveau :</label>
-                    <select class="form-control" id="select-niveau">
-                        <option>Niveau 1</option>
-                        <option>Niveau 2</option>
-                        <option>Niveau 3</option>
-                    </select>
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-success btn-block" id="btn-affecter">Affecter</button>
                 </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-                  <div class="form-group">
-                    <label for="TypeStage">Sélectionner le type de stage :</label>
-                    <select class="form-control" id="TypeStage" name="TypeStage">
-                        <option>Initiation</option>
-                        <option>PFA</option>
-                        <option>PFE</option>
-                    </select>
-                </div>
 
-                <div class="form-group row">
-                    <div class="col-md-12">
-
-                        <button type="submit" class="btn btn-primary btn-block" id="btn-affecter">Affecter</button>
-           </div>
-           </div>
-            </form>
-        </div>
-        
 
 @section Scripts{
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />

@@ -95,9 +95,13 @@ namespace AppAntiPlagiat.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EnseigId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EtudiantId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Intitulé")
                         .IsRequired()
@@ -107,12 +111,15 @@ namespace AppAntiPlagiat.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UtilisateurId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("Validé")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EtudiantId");
+                    b.HasIndex("UtilisateurId");
 
                     b.ToTable("Rapports");
                 });
@@ -359,13 +366,9 @@ namespace AppAntiPlagiat.Migrations
 
             modelBuilder.Entity("AppAntiPlagiat.Models.Rapport", b =>
                 {
-                    b.HasOne("AppAntiPlagiat.Models.Utilisateur", "Etudiant")
+                    b.HasOne("AppAntiPlagiat.Models.Utilisateur", null)
                         .WithMany("Rapports")
-                        .HasForeignKey("EtudiantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Etudiant");
+                        .HasForeignKey("UtilisateurId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

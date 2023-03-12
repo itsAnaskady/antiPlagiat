@@ -1,4 +1,39 @@
-﻿
+﻿@*@model Tuple<List<Utilisateur>, List<string>, List<Rapport>>
 @{
     ViewBag.Title = "Liste des Rapports";
 }
+
+
+
+
+<h1>Liste des rapports soumis par les étudiants</h1>
+
+@if (Model.Item3.Count == 0)
+{
+    <p>Aucun rapport n'a été soumis.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Étudiant</th>
+                <th>Type de stage</th>
+                <th>Intitulé du rapport</th>
+                <th>Date de soumission</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rapport in Model.Item3)
+            {
+                <tr>
+                    <td>@rapport.Etudiant.Nom @rapport.Etudiant.Prenom</td>
+                    <td>@rapport.Type</td>
+                    <td>@rapport.Intitulé</td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>*@
+}
+

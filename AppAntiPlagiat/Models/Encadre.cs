@@ -8,5 +8,6 @@
         public string EnseignantId { get; set; }
         public Utilisateur Enseignant { get; set; }
         public string TypeStage { get; set; }
+        
     }
 }
