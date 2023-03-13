@@ -2,18 +2,30 @@
 @{
     ViewBag.Title = "Profile";
 }
+<button hidden id="save-changes" data-user-id="@Model.id">Save Changes</button>
+<div hidden id="overlay-background"></div>
+
+
 <div id="partial-content-container">
     <section class="content" style="padding : 2%">
         <div class="card card-primary card-outline">
             <div class="card-body box-profile">
-                <div class="text-center">
+                
+                <div class="text-center" id="profile-image">
                     <div class="image-container">
-                        <img asp-append-version="true"  class="profile-user-img img-fluid img-circle" src="@Model.IMGurl" alt="img description">
+                        @if(Model.imgData != null)
+                        {
+                            <img asp-append-version="true" id="myImage"  class="profile-user-img img-fluid img-circle" src="data:@Model.imgType;base64,@Convert.ToBase64String(Model.imgData)">
+                        }
+                        else{
+                            <img asp-append-version="true" id="myImage" class="profile-user-img img-fluid img-circle" src="~/images/Users/NewUser.png">
+                        }
                         <div class="edit-icon"><i class="fas fa-pencil-alt"></i></div>
+                        
                         <input type="file" style="display:none" id="uploadImage">
                     </div>
                 </div>
-
+                
                 <h3 class="profile-username text-center">@Model.Nom @Model.Prenom</h3>
 
                 <p class="text-muted text-center">Bio</p>
@@ -55,6 +67,24 @@
             opacity: 1;
         }
 
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+            #overlay img {
+                max-width: 90%;
+                max-height: 90%;
+            }
+
+
     </style>
 }
 @section scripts{
@@ -72,40 +102,84 @@
     </script>
     <script>
         $(document).ready(function () {
-            $('.image-container').on('click', function () {
-                $('#uploadImage').click();
-            });
+            $('#profile-image').on('click', function () {
+                var imgSrc = $('#myImage').attr('src');
+                var $overlayImg = $('<img>', { src: imgSrc });
 
-            $('#uploadImage').on('change', function (e) {
-                var file = e.target.files[0];
-                var reader = new FileReader();
 
-                reader.onload = function () {
-                    var data = new FormData();
-                    data.append('image', file);
+                var $overlay = $('<div>', { id: 'overlay' }).append($overlayImg);
 
-                    $.ajax({
-                        url: 'Ens/upload',
-                        type: 'POST',
-                        data: data,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            var imageUrl = response.imageUrl;
-                            $('.profile-user-img').attr('src', imageUrl);
-                            // Update @Model.IMGurl with the new image URL
-                            // e.g. @Model.IMGurl = imageUrl;
-                        },
-                        error: function (xhr, status, error) {
-                            console.log(xhr.responseText);
-                        }
+                var $input = $('<input>', { type: 'file', id: 'fileInput', accept: 'image/*',title:'Taille de l\'image 800x800'});
+                var $annuler = $('<button>', { id: 'annuler', class: 'btn btn-tool' });
+                var $x = $('<i>', { class: 'fas fa-times' });
+                
+                $annuler.append($x);
+                
+                $overlay.append($annuler);
+                $overlay.append($input);
+                $('body').append($overlay);
+                
+                $overlay.fadeIn('fast');
+
+                $('#fileInput').on('change', function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+
+                    reader.onload = function (event) {
+                        var img = new Image();
+                        img.src = event.target.result;
+
+                        img.onload = function () {
+                            var canvas = document.createElement('canvas');
+
+                            
+                            var width = 500;
+                            var height = 500;
+                            
+                            canvas.width = width;
+                            canvas.height = height;
+
+                            var ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            canvas.toBlob(function (blob) {
+                                var formData = new FormData();
+                                formData.append('image', blob, file.name);
+                                formData.append('id', '@Model.id');
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/enseignant/UploadProfileImage',
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (result) {
+                                        console.log('Image uploaded successfully!');
+                                        location.reload();
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error uploading image:', error);
+                                    }
+                                });
+                            }, 'image/jpeg', 0.8);
+                        };
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                $('#annuler').on('click', function () {
+                    $overlay.fadeOut('fast', function () {
+                        $overlay.remove();
                     });
-                };
+                });
 
-                reader.readAsDataURL(file);
+                
             });
+
         });
     </script>
+    <script>
+
     </script>
 }
 

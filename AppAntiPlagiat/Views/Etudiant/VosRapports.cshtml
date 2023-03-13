@@ -30,6 +30,8 @@ else
                 <th>Nom de fichier</th>
                 <th>Type de stage</th>
                 <th>Date de dépôt</th>
+                <th>status du rapport</th>
+                <th>Télécharger le rapport</th>
             </tr>
         </thead>
         <tbody>
@@ -39,6 +41,16 @@ else
                     <td>@rapport.Intitulé</td>
                     <td>@rapport.Type</td>
                     <td>@rapport.DateDepot</td>
+                    <td>@if (rapport.Validé)
+                        {
+                            <span style="color : forestgreen">Validé </span>
+                        }
+                        else
+                        {
+                            <span style="color : darkgoldenrod">en cours de vérification</span>
+                        }
+                    </td>
+                    <td>@Html.ActionLink("Cliquer pour télécharger", "DownloadPdf", new { id = rapport.Id })</td>
                 </tr>
             }
         </tbody>

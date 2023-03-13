@@ -2,7 +2,9 @@
 {
     public class UserViewModel
     {
-        public string IMGurl { get; set; }
+        public string id { get; set; }
+        public byte[] imgData { get; set; }
+        public string imgType { get; set; }
         public string Nom { get; set; }
         public string Prenom { get; set; }
         public string CNE { get; set; }

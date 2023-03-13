@@ -41,7 +41,8 @@ namespace AppAntiPlagiat.Controllers
                     Filiere = user.Filiere,
                     Niveau = user.Niveau,
                     Email = user.Email,
-                    IMGurl = user.IMGurl,
+                    imgData = user.imgData,
+                    imgType = user.imgType,
                     Nom = user.Nom,
                     Prenom = user.Prenom
                 };
@@ -54,63 +55,42 @@ namespace AppAntiPlagiat.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> DeposerRapp(Rapport model, String TypeS)
+        public async Task<IActionResult> DeposerRapp(Rapport model, IFormFile pdfFile)
         {
             ViewBag.Ltype = "etudiant";
-            /*if (ModelState.IsValid)
-            {*/
-           
-              
-            
 
-            if (model.File != null && model.File.Length > 0)
+            if (pdfFile != null && pdfFile.Length > 0)
+            {
+                using (var stream = new MemoryStream())
                 {
-                    var nomFichier = Path.GetFileName(model.File.FileName.Trim('"'));
-                    var cheminFichier = Path.Combine(_env.WebRootPath, "rapports", nomFichier);
-
-                    // Vérifier si le dossier de destination existe et le créer si nécessaire
-                    var dossierDestination = Path.GetDirectoryName(cheminFichier);
-                    if (!Directory.Exists(dossierDestination))
+                    await pdfFile.CopyToAsync(stream);
+                    var rapport = new Rapport
                     {
-                        Directory.CreateDirectory(dossierDestination);
-                    }
-
-                    using (var stream = new FileStream(cheminFichier, FileMode.Create))
-                    {
-                        await model.File.CopyToAsync(stream);
-                    }
-
-              
-
-                // Enregistrer le rapport dans la base de données
-                var rapport = new Rapport
-                    {
+                        data = stream.ToArray(),
                         EtudiantId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-                        Intitulé = nomFichier,
-                        Chemin = cheminFichier,
+                        Intitulé = pdfFile.FileName,
                         DateDepot = DateTime.Now,
-                        Type = TypeS,
+                        Type = model.Type,
                         Validé = false,
-                      //  EnseignantID=IDEnseig
-                        
-
                     };
-
                     applicationDbContext.Rapports.Add(rapport);
-                    await applicationDbContext.SaveChangesAsync();
-
-
-                    return RedirectToAction("VosRapports");
-                    //  }
+                    applicationDbContext.SaveChanges();
                 }
-
-
                 return RedirectToAction("VosRapports");
 
-
             }
+            return RedirectToAction("ImporterRapport");
 
-      
+        }
+        public ActionResult DownloadPdf(int id)
+        {
+            var pdf = applicationDbContext.Rapports.Find(id);
+            if (pdf == null)
+            {
+                return RedirectToAction("VosRapports");
+            }
+            return File(pdf.data, "application/pdf", pdf.Intitulé+".pdf");
+        }
 
         public async Task<IActionResult> ImporterRapport()
         {
@@ -124,7 +104,8 @@ namespace AppAntiPlagiat.Controllers
             if (User.Identity.IsAuthenticated)
                 {
                     string etudiantId = userManager.GetUserId(User);
-                List<Rapport> mesRapports = applicationDbContext.Rapports.Where(r => r.EtudiantId == etudiantId).ToList();
+                var mesRapports = applicationDbContext.Rapports.Where(r => r.EtudiantId == etudiantId).ToList();
+                
                 return View(mesRapports);
             }
             return View(); 

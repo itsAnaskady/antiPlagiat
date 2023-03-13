@@ -9,7 +9,13 @@
             <div class="card-body box-profile">
                 <div class="text-center">
                     <div class="image-container">
-                        <img asp-append-version="true"  class="profile-user-img img-fluid img-circle" src="@Model.IMGurl" alt="img description">
+                        @if (Model.imgData != null)
+                        {
+                            <img asp-append-version="true" class="profile-user-img img-fluid img-circle" src="data:@Model.imgType;base64,@Convert.ToBase64String(Model.imgData)">
+                        
+                        }else{
+                            <img asp-append-version="true" class="profile-user-img img-fluid img-circle" src="~/images/Users/NewUser.png">
+                        }
                         <div class="edit-icon"><i class="fas fa-pencil-alt"></i></div>
                         <input type="file" style="display:none" id="uploadImage">
                     </div>
@@ -36,6 +42,45 @@
         </div>
     </section>
 </div>
+@section style{
+    <style>
+        .image-container {
+            position: relative;
+        }
+
+            .image-container:hover img {
+                filter: brightness(70%) saturate(80%);
+            }
+
+        .edit-icon {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.5;
+        }
+
+        .image-container:hover .edit-icon {
+            opacity: 1;
+        }
+
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('.image-container').hover(
+                function () {
+                    $(this).find('.edit-icon').fadeIn(200);
+                },
+                function () {
+                    $(this).find('.edit-icon').fadeOut(200);
+                }
+            );
+        });
+    </script>
+}
 
     
-    }
+    

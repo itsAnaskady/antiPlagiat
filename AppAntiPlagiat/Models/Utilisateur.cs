@@ -10,7 +10,8 @@ namespace AppAntiPlagiat.Models
 
         public string? CNE { get; set; }
 
-        public string? IMGurl { get; set; }
+        public byte[]? imgData { get; set; }
+        public string? imgType { get; set; }
 
         public string? Niveau { get; set; }
         

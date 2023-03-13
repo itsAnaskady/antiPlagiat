@@ -38,6 +38,8 @@ namespace AppAntiPlagiat.Controllers
             ViewBag.Ltype = "admin";
             if (ModelState.IsValid)
             {
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Users/NewUser.png");
+                var imageData = System.IO.File.ReadAllBytes(imagePath);
                 Utilisateur nvEnseignant = new Utilisateur
                 {
                     Email = model.Email,
@@ -47,7 +49,8 @@ namespace AppAntiPlagiat.Controllers
                     NormalizedUserName = model.Email.ToUpper(),
                     NormalizedEmail = model.Email.ToUpper(),
                     Departement = model.Departement,
-                    IMGurl = "~/images/Users/NewUser.png"
+                    imgData = imageData,
+                    imgType = "image/png"
                 };
                 //add user
                 var result = await userManager.CreateAsync(nvEnseignant, model.Password);
@@ -86,6 +89,8 @@ namespace AppAntiPlagiat.Controllers
             ViewBag.Ltype = "admin";
             if (ModelState.IsValid)
             {
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Users/NewUser.png");
+                var imageData = System.IO.File.ReadAllBytes(imagePath);
                 Utilisateur nvEtudiant = new Utilisateur
                 {
                     Email = model.Email,
@@ -95,7 +100,8 @@ namespace AppAntiPlagiat.Controllers
                     NormalizedUserName = model.Email.ToUpper(),
                     NormalizedEmail = model.Email.ToUpper(),
                     Niveau = model.Niveau,
-                    IMGurl = "~/images/Users/NewUser.png",
+                    imgData = imageData,
+                    imgType = "image/png",
                     Filiere = model.Filiere,
                     CNE = model.CNE
                 };

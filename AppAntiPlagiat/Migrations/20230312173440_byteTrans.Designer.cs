@@ -4,6 +4,7 @@ using AppAntiPlagiat.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppAntiPlagiat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230312173440_byteTrans")]
+    partial class byteTrans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,6 +151,9 @@ namespace AppAntiPlagiat.Migrations
                     b.Property<string>("Filiere")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IMGurl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -191,12 +197,6 @@ namespace AppAntiPlagiat.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<byte[]>("imgData")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("imgType")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

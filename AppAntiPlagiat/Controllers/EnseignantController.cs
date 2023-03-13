@@ -36,9 +36,11 @@ namespace AppAntiPlagiat.Controllers
                 {
                     Departement = user.Departement,
                     Email = user.Email,
-                    IMGurl = user.IMGurl,
+                    imgData = user.imgData,
+                    imgType = user.imgType,
                     Nom = user.Nom,
-                    Prenom= user.Prenom
+                    Prenom= user.Prenom,
+                    id = user.Id
                 };
                 return View(model);
             }
@@ -69,6 +71,26 @@ namespace AppAntiPlagiat.Controllers
                 }
                 return View();
             
+        }
+        [HttpPost]
+        public async Task<IActionResult> UploadProfileImage(string id,IFormFile image)
+        {
+            using (var stream = new MemoryStream())
+            {
+                await image.CopyToAsync(stream);
+                var enseignant = applicationDbContext.Users.Find(id);
+                if (enseignant == null)
+                {
+                    return NotFound();
+                }
+
+                enseignant.imgData = stream.ToArray();
+                enseignant.imgType = image.ContentType;
+
+                applicationDbContext.SaveChanges();
+
+            }
+                return RedirectToAction("Profile");
         }
 
 

@@ -13,9 +13,6 @@
         </div>
     </div>
     </div>
- 
-  
-
 @using (Html.BeginForm("DeposerRapp", "Etudiant", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
 {
     @if (TempData["SuccesMessage"] != null)
@@ -29,25 +26,21 @@
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "control-label col-md-3 col-sm-3" })
+        <label for="pdfFile">Importer votre rapport :</label>
         <div class="col-md-9 col-sm-9">
-            <input type="file" name="File" class="form-control-file" />
+            <input type="file" name="pdfFile" accept=".pdf" class="form-control-file" />
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Type, "Sélectionner le type de stage :", htmlAttributes: new { @class = "control-label col-md-3 col-sm-3" })
         <div class="col-md-9 col-sm-9">
-            <select class="form-control" id="TypeS" name="TypeS">
+            <select asp-for="Type" class="form-control">
+                <option selected disabled>-- selectionner le type de stage --</option>
                 <option value="Initiation">Initiation</option>
                 <option value="PFA">PFA</option>
                 <option value="PFE">PFE</option>
             </select>
         </div>
     </div>
-   
-
-    
-
 
     <div class="form-group">
         <div class="col-md-offset-3 col-sm-offset-3 col-md-9 col-sm-9">
@@ -55,22 +48,24 @@
         </div>
     </div>
 }
-<style>
-    .form-horizontal .control-label {
-        text-align: left;
-    }
+@section style{
+    <style>
+        .form-horizontal .control-label {
+            text-align: left;
+        }
 
-    .form-horizontal .form-control-file {
-        display: block;
-        height: calc(2.25rem + 10px);
-        padding: 0.375rem 0.75rem;
-        font-size: 1rem;
-        line-height: 1.5;
-        color: #495057;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #ced4da;
-        border-radius: 0.25rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
-</style>
+        .form-horizontal .form-control-file {
+            display: block;
+            height: calc(2.25rem + 10px);
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+    </style>
+}
