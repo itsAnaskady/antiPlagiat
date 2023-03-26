@@ -27,7 +27,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a asp-action="Profile" class="nav-link">Profile</a>
+                    <a asp-action="Profile" asp-controller="Etudiant" class="nav-link">Profile</a>
                 <li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a asp-action="Accueil" asp-controller="Home" class="nav-link">Accueil</a>
@@ -65,7 +65,7 @@
 
                     </div>
                     <div class="info">
-                        <a href=@Url.Action("Profile") class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom</a>
+                        <a href=@Url.Action("Profile") asp-controller="Etudiant" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom</a>
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href=@Url.Action("ImporterRapport") class="nav-link">
+                            <a href=@Url.Action("ImporterRapport") asp-controller="Etudiant" class="nav-link">
                                 <i class="nav-icon fas fa-upload"></i>
                                 <p>
                                     Importer un rapport
@@ -81,7 +81,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-action="VosRapports" class="nav-link">
+                            <a asp-action="VosRapports" asp-controller="Etudiant" class="nav-link">
                                 <i class="nav-icon fas fa-search"></i>
                                 <p>
                                     Consulter vos rapports
@@ -89,7 +89,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-action="ListeEnseignants" class="nav-link">
+                            <a asp-action="ListeEnseignants" asp-controller="Etudiant" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>
                                     Liste des enseignants
@@ -107,13 +107,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-action="" class="nav-link">
+                                    <a asp-action="" asp-controller="Etudiant" class="nav-link">
                                         <i class="fas fa-edit nav-icon"></i>
                                         <p>Guide des rapports</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-action="" class="nav-link">
+                                    <a asp-action="" asp-controller="Etudiant" class="nav-link">
                                         <i class="fas fa-arrow-alt-circle-down nav-icon"></i>
                                         <p>Générer un rapport</p>
                                     </a>

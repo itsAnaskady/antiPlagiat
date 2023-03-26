@@ -66,7 +66,7 @@
                }
           </div>
         <div class="info">
-              <a asp-action="Profile" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom </a>
+              <a asp-action="Profile" asp-controller="Enseignant" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom </a>
         </div>
       </div>
 
@@ -74,23 +74,23 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a asp-action="ListeEtudiants" class="nav-link">
+            <a asp-action="ListeEtudiants" asp-controller="Enseignant"  class="nav-link">
               <i class="nav-icon fas fa-user-graduate"></i>
               <p>
                 Liste des étudiants
               </p>
             </a>
           </li>
-                        <li class="nav-item">
-                            <a asp-action="ListeRapports" class="nav-link">
-                                <i class="nav-icon fas fa-user-graduate"></i>
-                                <p>
-                                    Liste des Rapports
-                                </p>
-                            </a>
-                        </li>
           <li class="nav-item">
-            <a asp-action="ListeRapports" class="nav-link">
+            <a asp-action="ListeRapports" asp-controller="Enseignant"  class="nav-link">
+                <i class="nav-icon fas fa-book-open"></i>
+                <p>
+                    Liste des Rapports
+                </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a asp-action="RechercherRapport" asp-controller="Enseignant"  class="nav-link">
               <i class="nav-icon fas fa-search"></i>
               <p>
                 Chercher un rapport
@@ -98,7 +98,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a asp-action="Scann" class="nav-link">
+            <a asp-action="Scann" asp-controller="Enseignant"  class="nav-link">
               <i class="nav-icon fas fa-calendar-plus"></i>
               <p>
                 Scanner un rapport

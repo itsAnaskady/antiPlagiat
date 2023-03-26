@@ -20,6 +20,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseHttpMethodOverride();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

@@ -1,4 +1,4 @@
-﻿@model Rapport
+﻿@model ImporterRapportViewModel
 
 @{
     ViewBag.Title = "Déposer un rapport";
@@ -25,28 +25,36 @@
     }
     @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        <label for="pdfFile">Importer votre rapport :</label>
-        <div class="col-md-9 col-sm-9">
-            <input type="file" name="pdfFile" accept=".pdf" class="form-control-file" />
+    @if(Model.TypeStage.Count != 0){
+        
+        <div class="form-group">
+            <label for="pdfFile">Importer votre rapport :</label>
+            <div class="col-md-9 col-sm-9">
+                <input type="file" name="pdfFile" accept=".pdf" class="form-control-file" />
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-9 col-sm-9">
-            <select asp-for="Type" class="form-control">
-                <option selected disabled>-- selectionner le type de stage --</option>
-                <option value="Initiation">Initiation</option>
-                <option value="PFA">PFA</option>
-                <option value="PFE">PFE</option>
-            </select>
+        <div class="form-group">
+            <div class="col-md-9 col-sm-9">
+                <select asp-for="@Model.Rapport.Type" class="form-control">
+                    <option selected disabled>-- selectionner le type de stage --</option>
+                    @foreach (string type in Model.TypeStage)
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-md-offset-3 col-sm-offset-3 col-md-9 col-sm-9">
-            <button type="submit" class="btn btn-primary">Déposer le rapport</button>
+        <div class="form-group">
+            <div class="col-md-offset-3 col-sm-offset-3 col-md-9 col-sm-9">
+                <button type="submit" class="btn btn-primary">Déposer le rapport</button>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <p>Vous n'avez aucun rapport à déposer !</p>
+    }
 }
 @section style{
     <style>

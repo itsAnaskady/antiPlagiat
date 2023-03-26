@@ -1,0 +1,481 @@
+﻿@model IEnumerable<GestionRapportViewModel>
+@inject  ApplicationDbContext dbContext
+@{
+    ViewBag.Title = "Les rapports";
+}
+<div id="partial-content-container">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4><b>Table des rapports</b></h4>
+                        </div>
+                        <div class="card-header">
+                            <h5><b style="text-decoration:underline">Filtrage:</b></h5>
+                            <div class="container">
+                                <div class="row" style="justify-content:center">
+                                    <div class="col-3">
+                                            <label>Type</label>
+                                            <select id="type-filtre" class="form-control filtre">
+                                                <option selected value="tout">tout</option>
+                                                <option>Initiation</option>
+                                                <option>Application</option>
+                                                <option>PFA</option>
+                                                <option>PFE</option>
+                                            </select>
+                                    </div>
+                                        <div class="col-3">
+                                            <label>Filière</label>
+                                        <select id="filiere-filtre" class="form-control filtre">
+                                                <option selected value="tout">tout</option>
+                                                <option value="INFO">INFO</option>
+                                                <option value="INDUS">INDUS</option>
+                                                <option value="GMSA">GMSA</option>
+                                                <option value="GESI">GESI</option>
+                                                <option value="GTR">GTR</option>
+                                                <option value="SEII">SEII</option>
+                                            </select>
+                                        </div>                     
+                                        <div class="col-3">
+                                            <label>Niveau</label>
+                                            <select id="niveau-filtre" class="form-control filtre">
+                                                <option selected value="tout">tout</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                        </div>                             
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label for="recherche">autre</label>
+                                                <input type="text" id="recherche" name="recherche" class="form-control" />
+                                            </div>
+                                        </div>
+                                </div>
+                                
+                            </div>
+                           
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <span id="info"></span>
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <button type="button" title="Séléctionner tout" class="btn btn-default btn-sm checkbox-toggle">
+                                                <i class="far fa-square"></i>
+                                            </button>
+                                            <button type="button" id="delete-selected-button" title="Supprimer les séléctionnes" class="btn btn-default btn-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </th>
+                                        <th>Intitulé</th>
+                                        <th>type</th>
+                                        <th>Filière</th>
+                                        <th>Niveau</th>
+                                        <th>Date du dépôt</th>
+                                        <th>Dernière modification</th>
+                                        <th>
+                                            Déposé par
+                                        </th>
+                                        <th>
+                                            Encadré par
+                                        </th>
+                                        <th>Pourcentage de plagiat</th>
+                                        <th>status</th>
+                                        <th>téléchargement</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="t_body">
+                                    @if(Model != null)
+                                    {
+                                            @foreach (GestionRapportViewModel m in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="icheck-primary">
+                                                            <input type="checkbox" id="check1" value="@m.rapport.Id" class="message-checkbox">
+                                                            <label for="check1"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @m.rapport.Intitulé
+                                                    </td>
+                                                    <td>
+                                                        @m.Encadre.TypeStage
+                                                    </td>
+                                                    <td>
+                                                        @m.filière
+                                                    </td>
+                                                    <td>
+                                                        @m.niveau
+                                                    </td>
+                                                    <td>
+                                                        @m.rapport.DateDepot
+                                                    </td>
+                                                    <td>
+                                                        @if (m.rapport.DateModif != null)
+                                                        {
+                                                            @m.rapport.DateModif
+                                                        }else
+                                                        {
+                                                            <span>aucune modification</span>
+                                                        }
+                                                    
+                                                    </td>
+                                                    <td>
+                                                        @if (m.Encadre.Etudiant != null)
+                                                        {
+                                                            <a href="/Home/Profiles?id=@m.Encadre.Etudiant.Id">@m.Encadre.Etudiant.Nom @m.Encadre.Etudiant.Prenom</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>Inconnu</p>
+                                                        }
+                                                    
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            var enseignant = dbContext.Users.Where(x => x.Id == m.Encadre.EnseignantId).FirstOrDefault();
+                                                        }
+                                                        @if(enseignant != null)
+                                                        {
+                                                            <a href="/Home/Profiles?id=@enseignant.Id">@enseignant.Nom @enseignant.Prenom</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a>Inconnu</a>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @m.Pplagiat
+                                                    </td>
+                                                    <td>
+                                                        @if(@m.rapport.Validé){
+                                                        <span style="color:forestgreen">Validé</span>
+                                                        }
+                                                        else
+                                                        {
+                                                        <span style="color:darkgoldenrod">en cours de vérification</span>
+                                                        }
+                                                    </td>
+                                                    <td><a asp-action="DownloadPdf" title="télécharger le rapport" asp-route-id="@m.rapport.Id">Télécharger</a></td>
+                                                </tr>
+
+                                            }
+                                        
+                                    }
+                                    else
+                                    {
+                                        <tr><b style="color:red">aucun rapport trouvé.</b></tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+@section scripts{
+    <script>
+        $(function () {
+            //Enable check and uncheck all functionality
+            $('.checkbox-toggle').click(function () {
+                var clicks = $(this).data('clicks')
+                if (clicks) {
+                    //Uncheck all checkboxes
+                    $('.t_body input[type=\'checkbox\']').prop('checked', false)
+                    $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+                } else {
+                    //Check all checkboxes
+                    $('.t_body input[type=\'checkbox\']').prop('checked', true)
+                    $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+                }
+                $(this).data('clicks', !clicks)
+            })
+        })
+    </script>
+    <script>
+    //delete selected msgs
+    $(document).ready(function () {
+        $("#delete-selected-button").on("click", function () {
+            var confirmed = confirm("Voulez-vous vraiment supprimer les rapports séléctionnés ?")
+            if (confirmed) {
+                var selectedIds = $(".message-checkbox:checked").map(function () {
+                    return $(this).val();
+                }).get();
+
+                $.ajax({
+                    url: "/Admin/DeleteSelectedRapports",
+                    type: "POST",
+                    data: { rapportIds: selectedIds },
+                    success: function (data) {
+                        // Handle success
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error: " + error);
+                    }
+                });
+            }
+            else {
+                var options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-bottom-center",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "2000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+                toastr.options = options;
+                toastr.info('Opération annulée.');
+            }
+        });
+
+    });
+    </script>
+    <script>
+            $(document).ready(function () {
+                $(".filtre").change(function () {
+                    var f = $("#filiere-filtre").find("option:selected").text();
+                    var n = $("#niveau-filtre").find("option:selected").text();
+                    var t = $("#type-filtre").find("option:selected").text();
+                    $.ajax({
+                        url: "/Admin/fitrageRapport1?type="+encodeURIComponent(t)+"&niveau="+encodeURIComponent(n)+"&filiere="+encodeURIComponent(f),
+                        type: "GET",
+                        success: function (response) {
+                            $("#info b").remove();
+                            $("#example1 tbody tr").remove();
+                            
+                            if (response.length != 0) {
+                                    var rowsHtml = "";                           
+                                    for (var i = 0; i < response.length; i++) {
+                                         var row = response[i];
+                                         rowsHtml += "<tr>"+
+                                                        "<td>"+
+                                                            "<div class=\"icheck-primary\">"+
+                                                                "<input type=\"checkbox\" id=\"check1\" value=\""+row.rapport.id+"\" class=\"message-checkbox\"/>"+
+                                                               "<label for=\"check1\"></label>"+
+                                                            "</div>"+
+                                                        "</td>"+
+                                                        "<td>"+row.rapport.intitulé+"</td>"+
+                                                        "<td>"+row.encadre.typeStage+"</td>"+
+                                                        "<td>"+row.filière+"</td>"+
+                                                        "<td>"+row.niveau+"</td>"+
+                                                        "<td>"+row.dateDepot+"</td>";
+
+                                        if(row.rapport.dateModif != null)
+                                        {
+                                            rowsHtml += "<td>"+row.dateModif+"</td>";
+                                        }else{
+                                            rowsHtml += "<td><span>aucune modification</span></td>";
+                                        }
+
+                                        if (row.encadre.etudiant != null)
+                                        {
+                                            rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.etudiant.id + "\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
+                                        }
+                                        else
+                                        {
+                                            rowsHtml += "<td><p>Inconnu</p></td>";
+                                        }
+
+                                        if (row.enseignantnom != null)
+                                        {
+                                            rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.enseignant.id + "\">" + row.enseignantnom + "</a></td>";
+                                        }
+                                        else
+                                        {
+                                            rowsHtml += "<td><p>Inconnu</p></td>";
+                                        }
+
+                                        rowsHtml+="<td>"+row.pplagiat+"</td>";
+
+                                        if (row.rapport.validé) {
+                                            rowsHtml += "<td><span style=\"color:forestgreen\">Validé</span></td>";
+                                        }
+                                        else
+                                        {
+                                            rowsHtml += "<td><span style=\"color:darkgoldenrod\">en cours de vérification</span></td>";
+                                        }
+                                        rowsHtml += "<td><a title=\"télécharger le rapport\" href=\"/Admin/DownloadPdf/"+row.rapport.id+"\">Télécharger</a></td>";
+                                        rowsHtml += "</tr>";
+                                    }
+                                    
+                                    $("#example1 tbody").append(rowsHtml);
+                            }
+                            else
+                            {
+                                var row = "<b style=\"color:red\">aucun rapport trouvé.</b>";
+                                $("#info").append(row);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                });
+            });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#recherche").on("input", function () {
+                $(".filtre").val("tout");
+                var inp = $("#recherche").val();
+                if (inp.length != 0) {
+                    $.ajax({
+                        url: "/Admin/filtrageParInput?input=" + encodeURIComponent(inp),
+                        type: "GET",
+                        success: function (response) {
+                            $("#info b").remove();
+                            $("#example1 tbody tr").remove();
+                            if (response.length != 0) {
+                                var rowsHtml = "";
+                                for (var i = 0; i < response.length; i++) {
+                                    var row = response[i];
+                                    rowsHtml += "<tr>" +
+                                        "<td>" +
+                                        "<div class=\"icheck-primary\">" +
+                                        "<input type=\"checkbox\" id=\"check1\" value=\"" + row.rapport.id + "\" class=\"message-checkbox\"/>" +
+                                        "<label for=\"check1\"></label>" +
+                                        "</div>" +
+                                        "</td>" +
+                                        "<td>" + row.rapport.intitulé + "</td>" +
+                                        "<td>" + row.encadre.typeStage + "</td>" +
+                                        "<td>" + row.filière + "</td>" +
+                                        "<td>" + row.niveau + "</td>" +
+                                        "<td>" + row.dateDepot + "</td>";
+
+                                    if (row.rapport.dateModif != null) {
+                                        rowsHtml += "<td>" + row.dateModif + "</td>";
+                                    } else {
+                                        rowsHtml += "<td><span>aucune modification</span></td>";
+                                    }
+
+                                    if (row.encadre.etudiant != null) {
+                                        rowsHtml += "<td><a href=\"/Home/Profiles?id="+row.encadre.etudiant.id+"\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
+                                    }
+                                    else {
+                                        rowsHtml += "<td><p>Inconnu</p></td>";
+                                    }
+
+                                    if (row.enseignantnom != null) {
+                                        rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.enseignant.id + "\">" + row.enseignantnom + "</a></td>";
+                                    }
+                                    else {
+                                        rowsHtml += "<td><p>Inconnu</p></td>";
+                                    }
+
+                                    rowsHtml += "<td>" + row.pplagiat + "</td>";
+
+                                    if (row.rapport.validé) {
+                                        rowsHtml += "<td><span style=\"color:forestgreen\">Validé</span></td>";
+                                    }
+                                    else {
+                                        rowsHtml += "<td><span style=\"color:darkgoldenrod\">en cours de vérification</span></td>";
+                                    }
+                                    rowsHtml += "<td><a title=\"télécharger le rapport\" href=\"/Admin/DownloadPdf/" + row.rapport.id + "\">Télécharger</a></td>";
+                                    rowsHtml += "</tr>";
+                                }
+
+                                $("#example1 tbody").append(rowsHtml);
+                            }
+                            else {
+                                var row = "<b style=\"color:red\">aucun rapport trouvé.</b>";
+                                $("#info").append(row);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: "/Admin/getAllRapport",
+                        type: "GET",
+                        success: function (response) {
+                            $("#info b").remove();
+                            $("#example1 tbody tr").remove();
+                            if (response.length != 0) {
+                                var rowsHtml = "";
+                                for (var i = 0; i < response.length; i++) {
+                                    var row = response[i];
+                                    rowsHtml += "<tr>" +
+                                        "<td>" +
+                                        "<div class=\"icheck-primary\">" +
+                                        "<input type=\"checkbox\" id=\"check1\" value=\"" + row.rapport.id + "\" class=\"message-checkbox\"/>" +
+                                        "<label for=\"check1\"></label>" +
+                                        "</div>" +
+                                        "</td>" +
+                                        "<td>" + row.rapport.intitulé + "</td>" +
+                                        "<td>" + row.encadre.typeStage + "</td>" +
+                                        "<td>" + row.filière + "</td>" +
+                                        "<td>" + row.niveau + "</td>" +
+                                        "<td>" + row.dateDepot + "</td>";
+
+                                    if (row.rapport.dateModif != null) {
+                                        rowsHtml += "<td>" + row.dateModif + "</td>";
+                                    } else {
+                                        rowsHtml += "<td><span>aucune modification</span></td>";
+                                    }
+
+                                    if (row.encadre.etudiant != null) {
+                                        rowsHtml += "<td><a>" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
+                                    }
+                                    else {
+                                        rowsHtml += "<td><p>Inconnu</p></td>";
+                                    }
+
+                                    if (row.enseignantnom != null) {
+                                        rowsHtml += "<td><a>" + row.enseignantnom + "</a></td>";
+                                    }
+                                    else {
+                                        rowsHtml += "<td><p>Inconnu</p></td>";
+                                    }
+
+                                    rowsHtml += "<td>" + row.pplagiat + "</td>";
+
+                                    if (row.rapport.validé) {
+                                        rowsHtml += "<td><span style=\"color:forestgreen\">Validé</span></td>";
+                                    }
+                                    else {
+                                        rowsHtml += "<td><span style=\"color:darkgoldenrod\">en cours de vérification</span></td>";
+                                    }
+                                    rowsHtml += "<td><a title=\"télécharger le rapport\" href=\"/Admin/DownloadPdf/" + row.rapport.id + "\">Télécharger</a></td>";
+                                    rowsHtml += "</tr>";
+                                }
+
+                                $("#example1 tbody").append(rowsHtml);
+                            }
+                            else {
+                                var row = "<b style=\"color:red\">aucun rapport trouvé.</b>";
+                                $("#info").append(row);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
+

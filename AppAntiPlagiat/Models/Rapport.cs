@@ -7,9 +7,11 @@ namespace AppAntiPlagiat.Models
         public int Id { get; set; }
         public string Intitulé { get; set; }
 
+        public DateTime? DateModif { get; set; }
         public string Type { get; set; }
 
         public bool Validé { get; set; }
+
         public byte[] data { get; set; }
 
         public DateTime DateDepot { get; set; }

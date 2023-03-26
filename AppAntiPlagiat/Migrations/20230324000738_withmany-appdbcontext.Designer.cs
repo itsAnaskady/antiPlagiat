@@ -4,6 +4,7 @@ using AppAntiPlagiat.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppAntiPlagiat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230324000738_withmany-appdbcontext")]
+    partial class withmanyappdbcontext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,16 +45,11 @@ namespace AppAntiPlagiat.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UtilisateurId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EnseignantId");
 
                     b.HasIndex("EtudiantId");
-
-                    b.HasIndex("UtilisateurId");
 
                     b.ToTable("Encadre");
                 });
@@ -382,14 +380,10 @@ namespace AppAntiPlagiat.Migrations
                         .IsRequired();
 
                     b.HasOne("AppAntiPlagiat.Models.Utilisateur", "Etudiant")
-                        .WithMany()
+                        .WithMany("Encadres")
                         .HasForeignKey("EtudiantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("AppAntiPlagiat.Models.Utilisateur", null)
-                        .WithMany("Encadres")
-                        .HasForeignKey("UtilisateurId");
 
                     b.Navigation("Enseignant");
 

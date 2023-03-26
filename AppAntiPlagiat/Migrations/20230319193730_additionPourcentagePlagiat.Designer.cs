@@ -4,6 +4,7 @@ using AppAntiPlagiat.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppAntiPlagiat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230319193730_additionPourcentagePlagiat")]
+    partial class additionPourcentagePlagiat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,16 +45,11 @@ namespace AppAntiPlagiat.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UtilisateurId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EnseignantId");
 
                     b.HasIndex("EtudiantId");
-
-                    b.HasIndex("UtilisateurId");
 
                     b.ToTable("Encadre");
                 });
@@ -115,9 +113,6 @@ namespace AppAntiPlagiat.Migrations
                     b.Property<DateTime>("DateDepot")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateModif")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("EtudiantId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -130,9 +125,6 @@ namespace AppAntiPlagiat.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UtilisateurId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("Validé")
                         .HasColumnType("bit");
 
@@ -143,8 +135,6 @@ namespace AppAntiPlagiat.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EtudiantId");
-
-                    b.HasIndex("UtilisateurId");
 
                     b.ToTable("Rapports");
                 });
@@ -382,14 +372,10 @@ namespace AppAntiPlagiat.Migrations
                         .IsRequired();
 
                     b.HasOne("AppAntiPlagiat.Models.Utilisateur", "Etudiant")
-                        .WithMany()
+                        .WithMany("Encadres")
                         .HasForeignKey("EtudiantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("AppAntiPlagiat.Models.Utilisateur", null)
-                        .WithMany("Encadres")
-                        .HasForeignKey("UtilisateurId");
 
                     b.Navigation("Enseignant");
 
@@ -399,14 +385,10 @@ namespace AppAntiPlagiat.Migrations
             modelBuilder.Entity("AppAntiPlagiat.Models.Rapport", b =>
                 {
                     b.HasOne("AppAntiPlagiat.Models.Utilisateur", "Etudiant")
-                        .WithMany()
-                        .HasForeignKey("EtudiantId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("AppAntiPlagiat.Models.Utilisateur", null)
                         .WithMany("Rapports")
-                        .HasForeignKey("UtilisateurId");
+                        .HasForeignKey("EtudiantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Etudiant");
                 });

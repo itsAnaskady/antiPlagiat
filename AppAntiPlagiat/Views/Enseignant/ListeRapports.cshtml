@@ -1,12 +1,18 @@
-﻿@*@model Tuple<List<Utilisateur>, List<string>, List<Rapport>>
+﻿@model Tuple<List<Utilisateur>, List<string>, List<Rapport>>
 @{
     ViewBag.Title = "Liste des Rapports";
 }
 
 
-
-
-<h1>Liste des rapports soumis par les étudiants</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bg-primary bg-light text-dark text-center py-3 ">
+                <h2> Liste des rapports :</h2>
+            </div>
+        </div>
+    </div>
+</div>
 
 @if (Model.Item3.Count == 0)
 {
@@ -34,6 +40,6 @@ else
                 </tr>
             }
         </tbody>
-    </table>*@
+    </table>
 }
 

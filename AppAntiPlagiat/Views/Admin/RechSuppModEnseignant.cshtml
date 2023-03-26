@@ -266,7 +266,7 @@
                                                 "</td>"+
                                             "</tr>";
                              }
-                            $("#example1 tbody").html(rowsHtml);
+                            $("#example1 tbody").append(rowsHtml);
                         },
                         error: function (xhr, status, error) {
                          console.log("Error: " + error);

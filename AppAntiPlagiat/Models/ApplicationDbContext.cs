@@ -11,18 +11,20 @@ namespace AppAntiPlagiat.Models
         public DbSet<Rapport> Rapports { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Encadre> Encadre { get; set; }
+        public DbSet<PourcentagePlagiat> pourcentagePlagiats { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Rapport>()
                 .HasOne(o => o.Etudiant)
-                .WithMany(c => c.Rapports)
-                .HasForeignKey(o => o.EtudiantId);
+                .WithMany()
+                .HasForeignKey(o => o.EtudiantId)
+                .OnDelete(DeleteBehavior.NoAction);
 
 
 
             builder.Entity<Encadre>()
                 .HasOne(er => er.Etudiant)
-                .WithMany(e => e.Encadres)
+                .WithMany()
                 .HasForeignKey(er => er.EtudiantId)
                 .OnDelete(DeleteBehavior.Cascade);
 

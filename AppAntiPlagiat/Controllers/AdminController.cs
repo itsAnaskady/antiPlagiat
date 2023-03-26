@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+
 using System.Text;
+using static iTextSharp.text.pdf.AcroFields;
+
 
 namespace AppAntiPlagiat.Controllers
 {
@@ -22,11 +24,7 @@ namespace AppAntiPlagiat.Controllers
             this.applicationDbContext = applicationDbContext;
         }
 
-        public IActionResult Dashboard()
-        {
-            ViewBag.Ltype = "admin";
-            return View();
-        }
+        
         public IActionResult AjouterEnseignant()
         {
             ViewBag.Ltype = "admin";
@@ -294,7 +292,6 @@ namespace AppAntiPlagiat.Controllers
             return View("Affectation");
 
         }
-
         [HttpPost]
         public async Task<IActionResult> Modifier(Encadre encadre)
         {
@@ -652,6 +649,216 @@ namespace AppAntiPlagiat.Controllers
                 var users = await userManager.GetUsersInRoleAsync("enseignant");
                 return Json(users);
             }
+        }
+    
+        public IActionResult RechercherRapport()
+        {
+            ViewBag.Ltype = "admin";
+            var rapport = applicationDbContext.Rapports.ToList();
+            List<GestionRapportViewModel> gr = new List<GestionRapportViewModel>();
+
+            if (rapport.Count() != 0)
+            {
+                foreach (Rapport item in rapport)
+                {
+                    GestionRapportViewModel model = new GestionRapportViewModel()
+                    {
+                        rapport = item,
+                        Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId ==  item.EtudiantId && item.Type == x.TypeStage).FirstOrDefault(),
+                        filière = applicationDbContext.Utilisateurs.Where(x => x.Id == item.EtudiantId).FirstOrDefault().Filiere,
+                        niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == item.EtudiantId).FirstOrDefault().Niveau,
+                        Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%"
+                    };
+                    gr.Add(model);
+                }
+            }
+            
+            return View(gr);
+        }
+        public ActionResult DownloadPdf(int id)
+        {
+            var pdf = applicationDbContext.Rapports.Find(id);
+            if (pdf == null)
+            {
+                return RedirectToAction("VosRapports");
+            }
+            return File(pdf.data, "application/pdf", pdf.Intitulé + ".pdf");
+        }
+        public ActionResult DeleteSelectedRapports(string[] rapportIds)
+        {
+            foreach (string id in rapportIds)
+            {
+                applicationDbContext.Rapports.Remove(applicationDbContext.Rapports.Find(int.Parse(id)));
+                applicationDbContext.SaveChanges();
+            }
+            return RedirectToAction("RechercherRapport");
+        }
+        public double plagiatAuto(byte[] pdf)
+        {
+            PlagiarismDetection aP = new PlagiarismDetection(applicationDbContext);
+            double poucentagePlagiat = aP.Plagiat(pdf);
+
+            return poucentagePlagiat * 100;
+        }
+        
+        public async Task<JsonResult> fitrageRapport1(string type,string niveau,string filiere)
+        {
+            List<Rapport> rapportByType = new List<Rapport>();
+            List<Rapport> rapportByNv = new List<Rapport>();
+            List<Rapport> rapportByFil = new List<Rapport>();
+
+            if (type != "tout") 
+                rapportByType = applicationDbContext.Rapports.Where(x => x.Type == type).ToList();
+            else 
+                rapportByType = applicationDbContext.Rapports.ToList();
+
+            if (niveau != "tout")
+                rapportByNv = applicationDbContext.Rapports.Where(x => x.Etudiant.Niveau == niveau).ToList();
+            else
+                rapportByNv = applicationDbContext.Rapports.ToList();
+
+            if (filiere != "tout")
+                rapportByFil = applicationDbContext.Rapports.Where(x => x.Etudiant.Filiere == filiere).ToList();
+            else
+                rapportByFil = applicationDbContext.Rapports.ToList();
+            
+            
+            var rapport = rapportByFil.Intersect(rapportByNv).Intersect(rapportByType).ToList();
+           
+            List<GestionRapportViewModel1> gr = new List<GestionRapportViewModel1>();
+            if (rapport.Count() != 0)
+            {
+                foreach (var item in rapport)
+                {
+                    GestionRapportViewModel1 model = new GestionRapportViewModel1()
+                    {
+                        rapport = item,
+                        Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && x.TypeStage == item.Type).FirstOrDefault(),
+                        Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%",
+                    };
+                    model.filière = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Filiere;
+                    model.niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Niveau;
+                    if (applicationDbContext.Users.Where(x => x.Id == model.Encadre.EnseignantId).FirstOrDefault() != null)
+                    {
+                        model.enseignantnom = model.Encadre.Enseignant.Nom + " " + model.Encadre.Enseignant.Prenom;
+                    }
+                    model.dateDepot = "" + model.rapport.DateDepot;
+
+                    if (model.rapport.DateModif != null)
+                    {
+                        model.dateModif = ""+model.rapport.DateModif;
+                    }
+
+                    gr.Add(model);
+                }
+                
+            }
+            return Json(gr);
+        }
+        
+        public JsonResult filtrageParInput(string input)
+        {
+            input = input.Trim().ToLower();
+            var rapport1 = applicationDbContext.Rapports
+                            .Where(x => 
+                                    x.DateModif.ToString().Trim().ToLower().Contains(input) ||  
+                                    x.DateDepot.ToString().Trim().ToLower().Contains(input) || 
+                                    x.Intitulé.Trim().ToLower().Contains(input) ||
+                                    x.Type.Trim().ToLower().Contains(input) ||
+                                    x.Etudiant.Nom.Trim().ToLower().Contains(input) ||
+                                    x.Etudiant.Prenom.Trim().ToLower().Contains(input) ||
+                                    x.Etudiant.Filiere.Trim().ToLower().Contains(input) ||
+                                    x.Etudiant.Niveau.Trim().ToLower().Contains(input)
+                            ).ToList();
+
+            var rapport = new List<Rapport>();
+            if(rapport1.Count() == 0)
+            {
+                var encadre = applicationDbContext.Encadre
+                                .Where(x =>
+                                    x.Enseignant.Nom.Trim().ToLower().Contains(input) ||
+                                    x.Enseignant.Prenom.Trim().ToLower().Contains(input) ||
+                                    x.Enseignant.Departement.Trim().ToLower().Contains(input) ||
+                                    x.Enseignant.Email.Trim().ToLower().Contains(input)
+                                ).ToList();
+
+                foreach( var item in encadre)
+                {
+                    var r = applicationDbContext.Rapports.Where(x => x.EtudiantId == item.EtudiantId).FirstOrDefault();
+                    if(r != null)
+                        rapport.Add(r);
+                }
+            }
+            else
+            {
+                rapport = rapport1;
+            }
+
+            rapport = rapport.Distinct().ToList();
+
+            List<GestionRapportViewModel1> gr = new List<GestionRapportViewModel1>();
+            if (rapport.Count() != 0)
+            {
+                foreach (var item in rapport)
+                {
+                    GestionRapportViewModel1 model = new GestionRapportViewModel1()
+                    {
+                        rapport = item,
+                        Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && x.TypeStage == item.Type).FirstOrDefault(),
+                        Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%",
+                    };
+                    model.filière = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Filiere;
+                    model.niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Niveau;
+                    if (applicationDbContext.Users.Where(x => x.Id == model.Encadre.EnseignantId).FirstOrDefault() != null)
+                    {
+                        model.enseignantnom = model.Encadre.Enseignant.Nom + " " + model.Encadre.Enseignant.Prenom;
+                    }
+                    model.dateDepot = "" + model.rapport.DateDepot;
+
+                    if (model.rapport.DateModif != null)
+                    {
+                        model.dateModif = "" + model.rapport.DateModif;
+                    }
+
+                    gr.Add(model);
+                }
+
+            }
+            gr = gr.Distinct().ToList();
+            return Json(gr);
+        }
+        public JsonResult getAllRapport()
+        {
+            var rapport = applicationDbContext.Rapports.ToList();
+            List<GestionRapportViewModel1> gr = new List<GestionRapportViewModel1>();
+            if (rapport.Count() != 0)
+            {
+                foreach (var item in rapport)
+                {
+                    GestionRapportViewModel1 model = new GestionRapportViewModel1()
+                    {
+                        rapport = item,
+                        Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && x.TypeStage == item.Type).FirstOrDefault(),
+                        Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%",
+                    };
+                    model.filière = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Filiere;
+                    model.niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Niveau;
+                    if (applicationDbContext.Users.Where(x => x.Id == model.Encadre.EnseignantId).FirstOrDefault() != null)
+                    {
+                        model.enseignantnom = model.Encadre.Enseignant.Nom + " " + model.Encadre.Enseignant.Prenom;
+                    }
+                    model.dateDepot = "" + model.rapport.DateDepot;
+
+                    if (model.rapport.DateModif != null)
+                    {
+                        model.dateModif = "" + model.rapport.DateModif;
+                    }
+
+                    gr.Add(model);
+                }
+
+            }
+            return Json(gr);
         }
     }
 
