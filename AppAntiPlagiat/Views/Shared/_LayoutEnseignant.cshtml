@@ -1,5 +1,5 @@
 ﻿@inject ApplicationDbContext dbContext
-
+@inject UserManager<Utilisateur> userManager
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -71,8 +71,20 @@
       </div>
 
       <!-- Sidebar Menu -->
+                @{
+                    string iduser = userManager.GetUserId(User);
+                }
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+           <li class="nav-item">
+                <a asp-action="Notification" asp-controller="Enseignant" class="nav-link">
+                    <i class="nav-icon fas fa-bell"></i>
+                    <span class="badge badge-warning">@dbContext.Notifications.Where(x => x.UserIdDesti == iduser && x.Vu == false).ToList().Count()</span>
+                    <p>
+                        Notifications
+                    </p>
+                </a>
+           </li>  
           <li class="nav-item">
             <a asp-action="ListeEtudiants" asp-controller="Enseignant"  class="nav-link">
               <i class="nav-icon fas fa-user-graduate"></i>
@@ -94,14 +106,6 @@
               <i class="nav-icon fas fa-search"></i>
               <p>
                 Chercher un rapport
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a asp-action="Scann" asp-controller="Enseignant"  class="nav-link">
-              <i class="nav-icon fas fa-calendar-plus"></i>
-              <p>
-                Scanner un rapport
               </p>
             </a>
           </li>

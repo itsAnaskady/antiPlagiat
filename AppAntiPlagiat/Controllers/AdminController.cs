@@ -320,8 +320,6 @@ namespace AppAntiPlagiat.Controllers
         public IActionResult Messages(int Page = 1)
         {
             ViewBag.Ltype = "admin";
-
-
             int pageSize = 25;
             int skip = (Page - 1) * pageSize;
             var liste = new List<ListeMessagesViewModel>();

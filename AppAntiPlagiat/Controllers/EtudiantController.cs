@@ -106,6 +106,18 @@ namespace AppAntiPlagiat.Controllers
                         Validé = false,
                     };
                     applicationDbContext.Rapports.Add(rapport);
+                    var etud = applicationDbContext.Utilisateurs.Find(User);
+                    string idEnseignant = applicationDbContext.Encadre.Where(x => x.EtudiantId == etud.Id && x.TypeStage == rapport.Type).FirstOrDefault().EnseignantId; 
+                    Notification notification = new Notification()
+                    {
+                        DateNotif = DateTime.Now,
+                        message = "L'étudiant " + etud.NomComplet + " à déposer un rapport de type " + rapport.Type,
+                        UserIdDesti = idEnseignant,
+                        User = etud,
+                        UserId = etud.Id,
+                        Vu = false
+                    };
+                    applicationDbContext.Notifications.Add(notification);
                     applicationDbContext.SaveChanges();
                 }
                 return RedirectToAction("VosRapports");
@@ -244,10 +256,105 @@ namespace AppAntiPlagiat.Controllers
            return View(new { RappId = RappId,type =type});
         }
        
-        public ActionResult Notification()
+        public ActionResult Notification(int Page = 1)
         {
             ViewBag.Ltype = "etudiant";
-            return View();
+            int pageSize = 25;
+            int skip = (Page - 1) * pageSize;
+            var liste = new List<NotificationViewModel>();
+            List<Notification> N = GetNotificationsSubset(skip, pageSize);
+
+            foreach (Notification item in N)
+            {
+
+                NotificationViewModel notif = new NotificationViewModel()
+                {
+                    emetteur = applicationDbContext.Utilisateurs.Find(item.UserId),
+                    notification = item,
+                    tempPasse = TimeAgo(item.DateNotif)
+                };
+               
+                liste.Add(notif);
+            }
+
+            int TotalMessageCount = applicationDbContext.Messages.Count();
+            ViewBag.TotalMessageCount = TotalMessageCount;
+
+            bool hasMoreMessages = (applicationDbContext.Messages.Count() >= skip + pageSize);
+            ViewBag.HasMoreMessages = hasMoreMessages;
+
+            ViewBag.Page = Page;
+            return View(liste);
+        }
+        private List<Notification> GetNotificationsSubset(int skip, int pageSize)
+        {
+            string id = userManager.GetUserId(User);
+            var notifications = applicationDbContext.Notifications
+                                        .Where(x => x.UserId == id)
+                                        .OrderByDescending(m => m.DateNotif)
+                                        .Skip(skip)
+                                        .Take(pageSize)
+                                        .ToList();
+            foreach (Notification item in notifications)
+            {
+                item.Vu = true;
+            }
+            applicationDbContext.SaveChanges();
+
+            return notifications;
+        }
+        public string TimeAgo(DateTime dateTime)
+        {
+            string result = string.Empty;
+            var timeSpan = DateTime.Now.Subtract(dateTime);
+
+            if (timeSpan <= TimeSpan.FromSeconds(60))
+            {
+                result = string.Format("Il y a {0} secondes", timeSpan.Seconds);
+            }
+            else if (timeSpan <= TimeSpan.FromMinutes(60))
+            {
+                result = timeSpan.Minutes > 1 ?
+                    String.Format("Il y a {0} minutes", timeSpan.Minutes) :
+                    "Il y a une minute";
+            }
+            else if (timeSpan <= TimeSpan.FromHours(24))
+            {
+                result = timeSpan.Hours > 1 ?
+                    String.Format("Il y a {0} heures", timeSpan.Hours) :
+                    "Il y a une heure";
+            }
+            else if (timeSpan <= TimeSpan.FromDays(30))
+            {
+                result = timeSpan.Days > 1 ?
+                    String.Format("Il y a {0} jours", timeSpan.Days) :
+                    "Hier";
+            }
+            else if (timeSpan <= TimeSpan.FromDays(365))
+            {
+                result = timeSpan.Days > 30 ?
+                    String.Format("Il y a {0} mois", timeSpan.Days / 30) :
+                    "Il y a un mois";
+            }
+            else
+            {
+                result = timeSpan.Days > 365 ?
+                    String.Format("Il y a {0} ans", timeSpan.Days / 365) :
+                    "Il y a une ans";
+            }
+
+            return result;
+        }
+        public IActionResult DeleteSelectedNotifications(int[] Ids)
+        {
+            foreach (int i in Ids)
+            {
+                var a = applicationDbContext.Notifications.Find(i);
+                applicationDbContext.Remove(a);
+            }
+            applicationDbContext.SaveChanges();
+
+            return RedirectToAction("Notifications"); ;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model Tuple<List<Utilisateur>, List<string>, List<Rapport>>
+﻿@model IEnumerable<RapportViewModel>
+@inject ApplicationDbContext db
 @{
     ViewBag.Title = "Liste des Rapports";
 }
@@ -7,7 +8,7 @@
     <div class="card">
         <h4 class="card-header"><b>Liste des rapports</b></h4>
         <div class="card-body">
-        @if (Model.Item3.Count == 0)
+        @if (Model.Count() == 0)
         {
             <p>Aucun rapport n'a été soumis.</p>
         }
@@ -19,17 +20,64 @@
                         <th>Étudiant</th>
                         <th>Type de stage</th>
                         <th>Intitulé du rapport</th>
+                        <th>Pourcentage de plagiat</th>
                         <th>Date de soumission</th>
+                        <th>Dernière modification le</th>
+                        <th>Status</th>
+                        <th>Téléchargement</th>
+                        <th>Plagiat manuelle</th>
+                        <th>Validé le rapport</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var rapport in Model.Item3)
+                    @foreach (RapportViewModel item in Model)
                     {
                         <tr>
-                            <td>@rapport.Etudiant.Nom @rapport.Etudiant.Prenom</td>
-                            <td>@rapport.Type</td>
-                            <td>@rapport.Intitulé</td>
-                    
+                            <td><a href="/Home/Profiles?id=@item.rapport.EtudiantId">@db.Utilisateurs.Find(item.rapport.EtudiantId).NomComplet</a></td>
+                            <td>@item.rapport.Type</td>
+                            <td>@item.rapport.Intitulé</td>
+                            <td>@item.pourcentagePlagiat.ToString("0.00")%</td>
+                            <td>@item.rapport.DateDepot</td>
+                            <td>
+                                @if(item.rapport.DateModif != null){
+                                    @item.rapport.DateModif
+                                }else{
+                                    <span>aucune modification</span>
+                                }     
+                            </td>
+                            <td>
+                                @if (@item.rapport.Validé)
+                                {
+                                    <span style="color:forestgreen">Validé</span>
+                                }
+                                else
+                                {
+                                    <span style="color:darkgoldenrod">en cours de vérification</span>
+                                }
+                            </td>
+                            <td><a asp-action="DownloadPdf" title="télécharger le rapport" asp-route-id="@item.rapport.Id">Télécharger</a></td>
+                            <td> 
+                                @if (@item.rapport.Validé)
+                                {
+                                    <span style="color:forestgreen">Validé</span>
+                                }
+                                else
+                                {
+                                    <a href="/Enseignant/PlagiatManuelle?id=@item.rapport.Id">ici</a>
+                                }
+                            </td>
+                            <td>
+                                @if (@item.rapport.Validé)
+                                {
+                                    <span style="color:forestgreen">Le rapport est déjà validé</span>
+                                }
+                                else
+                                {
+                                    <a asp-action="ValiderRapport" asp-route-id="@item.rapport.Id" asp onclick="confirm('Voulez-vous vraiment valider ce rapport ?')" class="btn btn-block btn-success">Valider</a>
+                                }
+                                
+                            </td>
+                            
                         </tr>
                     }
                 </tbody>

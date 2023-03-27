@@ -1,4 +1,5 @@
 ﻿@inject ApplicationDbContext dbContext
+@inject UserManager<Utilisateur> userManager
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -68,10 +69,22 @@
                         <a asp-action="Profile" asp-controller="Etudiant" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom</a>
                     </div>
                 </div>
-
+                @{
+                    string iduser = userManager.GetUserId(User);
+                }
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item">
+                            
+                            <a asp-action="Notification" asp-controller="Etudiant" class="nav-link">
+                                <i class="nav-icon fas fa-bell"></i>
+                                <span class="badge badge-warning">@dbContext.Notifications.Where(x => x.UserIdDesti == iduser && x.Vu == false).ToList().Count()</span>
+                                <p>
+                                    Notifications
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a asp-action="ImporterRapport" asp-controller="Etudiant" class="nav-link">
                                 <i class="nav-icon fas fa-upload"></i>
