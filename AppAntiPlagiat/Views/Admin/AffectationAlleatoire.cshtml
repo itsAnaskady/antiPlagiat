@@ -2,35 +2,42 @@
 @{
     ViewBag.Title = "AffectationAlleatoire";
 }
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+<div id="partial-content-container" style="padding : 1%">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            </div>
+        </div>
+    }
+    @if (TempData["SuccesMessage"] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success">@TempData["SuccesMessage"]</div>
+            </div>
+        </div>
+    }
+    <div class="card">
+        <h5 class="card-header">Affectation aléatoire</h5>
+        <div class="card-body">
+            @using (Html.BeginForm("AffectationAlleatoire", "Admin", FormMethod.Post))
+            {
+                <div class="form-group">
+                    @Html.Label("Type de stage : ")
+                    @Html.DropDownList("TypeStage", new SelectList(new List<string> { "Initiation", "PFA", "PFE","Application" }), "Sélectionner un type de stage", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.Label("Niveau : ")
+                    @Html.DropDownList("Niveau", new SelectList(new List<string> { "1", "2", "3" }), "Sélectionner un Niveau", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.Label("Filiere: ")
+                    @Html.DropDownList("Filiere", new SelectList(new List<string> { "INDUS", "INFO", "GTR","GMSA","GESI","SEII" }), "Sélectionner une Filiere", new { @class = "form-control" })
+                </div>
+                <button type="submit" class="btn btn-primary">Affecter aléatoirement</button>
+            }
         </div>
     </div>
-}
-@if (TempData["SuccesMessage"] != null)
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-success">@TempData["SuccesMessage"]</div>
-        </div>
-    </div>
-}
-@using (Html.BeginForm("AffectationAlleatoire", "Admin", FormMethod.Post))
-{
-    <div class="form-group">
-        @Html.Label("Type de stage : ")
-        @Html.DropDownList("TypeStage", new SelectList(new List<string> { "Initiation", "PFA", "PFE","Application" }), "Sélectionner un type de stage", new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.Label("Niveau : ")
-        @Html.DropDownList("Niveau", new SelectList(new List<string> { "1", "2", "3" }), "Sélectionner un Niveau", new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.Label("Filiere: ")
-        @Html.DropDownList("Filiere", new SelectList(new List<string> { "INDUS", "INFO", "GTR","GMSA","GESI","SEII" }), "Sélectionner une Filiere", new { @class = "form-control" })
-    </div>
-    <button type="submit" class="btn btn-primary">Affecter aléatoirement</button>
-}
+</div>

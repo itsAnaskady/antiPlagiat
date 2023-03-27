@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
 using System.Text;
-using static iTextSharp.text.pdf.AcroFields;
 
 
 namespace AppAntiPlagiat.Controllers
@@ -152,6 +150,8 @@ namespace AppAntiPlagiat.Controllers
                               select new
                               {
                                   Id = Encadre.Id,
+                                  etudiantID = etudiant.Id,
+                                  enseignantID = enseignant.Id,
                                   EtudiantNom = etudiant.Nom,
                                   EtudiantPrenom = etudiant.Prenom,
                                   EnseignantNom = enseignant.Nom,

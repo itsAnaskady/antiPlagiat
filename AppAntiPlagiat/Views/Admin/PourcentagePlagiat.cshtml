@@ -21,7 +21,19 @@
                 </div>
                 <div class="text text-danger" asp-validation-summary="All"></div>
             </form>
-        </div>
-        
+        </div> 
     </div>
 </div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#estDouble').keypress(function (event) {
+                var charCode = (event.which) ? event.which : event.keyCode;
+                if (charCode != 44 && (charCode < 48 || charCode > 57)) {
+                    event.preventDefault();
+                    $(this).val($(this).val().replace(String.fromCharCode(charCode), ''));
+                }
+            });
+        });
+    </script>
+}

@@ -128,7 +128,6 @@ using AppAntiPlagiat.Models;
     }
         
     }
-
     public class rapportEtPourcentage
     {
         public int IdRapport { get; set; }
