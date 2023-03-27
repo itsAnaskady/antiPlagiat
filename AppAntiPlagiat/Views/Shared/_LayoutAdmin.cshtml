@@ -36,7 +36,7 @@
             <a asp-action="Messages" asp-controller="Admin" class="nav-link">Messages</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a asp-action="Accueil" asp-controller="Admin" asp-controller="Home" class="nav-link">Accueil</a>
+            <a asp-action="Accueil" asp-controller="Home"  class="nav-link">Accueil</a>
         </li>
     </ul>
     
@@ -98,13 +98,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href=@Url.Action("AjouterEnseignant") asp-controller="Admin" class="nav-link">
+                                    <a asp-action="AjouterEnseignant" asp-controller="Admin" class="nav-link">
                                         <i class="fas fa-user-plus nav-icon"></i>
                                         <p>Ajouter Enseignant</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href=@Url.Action("RechSuppModEnseignant") asp-controller="Admin" class="nav-link">
+                                    <a asp-action="RechSuppModEnseignant" asp-controller="Admin" class="nav-link">
                                         <i class="fas fa-user-edit nav-icon"></i>
                                         <p>Rech + Supp + Mod</p>
                                     </a>
@@ -121,13 +121,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href=@Url.Action("AjouterEtudiant") asp-controller="Admin" class="nav-link">
+                                    <a asp-action="AjouterEtudiant" asp-controller="Admin" class="nav-link">
                                         <i class="fas fa-user-plus nav-icon"></i>
                                         <p>Ajouter Etudiant</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href=@Url.Action("RechSuppModEtudiant") asp-controller ="Admin" class="nav-link">
+                                    <a asp-action="RechSuppModEtudiant" asp-controller="Admin" class="nav-link">
                                         <i class="fas fa-user-edit nav-icon"></i>
                                         <p>Rech + Supp + Mod</p>
                                     </a>
@@ -135,7 +135,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href=@Url.Action("Affectation") asp-controller="Admin" class="nav-link">
+                            <a asp-action="Affectation" asp-controller="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-people-arrows"></i>
                                 <p>
                                     Affectation
@@ -143,7 +143,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href=@Url.Action("ListeAffectation") asp-controller="Admin" class="nav-link">
+                            <a asp-action="ListeAffectation" asp-controller="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-people-arrows"></i>
                                 <p>
                                    Liste des affectations
@@ -151,7 +151,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href=@Url.Action("RechercherRapport") asp-controller="Admin" class="nav-link">
+                            <a asp-action="RechercherRapport" asp-controller="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-book-open"></i>
                                 <p>
                                     Les rapports
@@ -160,7 +160,15 @@
                         </li>
                   
                         <li class="nav-item">
-                            <a href=@Url.Action("Messages") asp-controller="Admin" class="nav-link">
+                            <a asp-action="PourcentagePlagiat" asp-controller="Admin" class="nav-link">
+                                <i class="nav-icon far fa-edit"></i>
+                                <p>
+                                    Pourcentage de plagiat
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Messages" asp-controller="Admin" class="nav-link">
                                 <i class="nav-icon far fa-envelope"></i>
                                 <p>
                                     Messages

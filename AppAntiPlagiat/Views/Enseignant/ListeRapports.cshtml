@@ -3,43 +3,39 @@
     ViewBag.Title = "Liste des Rapports";
 }
 
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="bg-primary bg-light text-dark text-center py-3 ">
-                <h2> Liste des rapports :</h2>
-            </div>
+<div id="partial-content-container" style="padding : 1%">
+    <div class="card">
+        <h4 class="card-header"><b>Liste des rapports</b></h4>
+        <div class="card-body">
+        @if (Model.Item3.Count == 0)
+        {
+            <p>Aucun rapport n'a été soumis.</p>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Étudiant</th>
+                        <th>Type de stage</th>
+                        <th>Intitulé du rapport</th>
+                        <th>Date de soumission</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rapport in Model.Item3)
+                    {
+                        <tr>
+                            <td>@rapport.Etudiant.Nom @rapport.Etudiant.Prenom</td>
+                            <td>@rapport.Type</td>
+                            <td>@rapport.Intitulé</td>
+                    
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
         </div>
     </div>
 </div>
-
-@if (Model.Item3.Count == 0)
-{
-    <p>Aucun rapport n'a été soumis.</p>
-}
-else
-{
-    <table>
-        <thead>
-            <tr>
-                <th>Étudiant</th>
-                <th>Type de stage</th>
-                <th>Intitulé du rapport</th>
-                <th>Date de soumission</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var rapport in Model.Item3)
-            {
-                <tr>
-                    <td>@rapport.Etudiant.Nom @rapport.Etudiant.Prenom</td>
-                    <td>@rapport.Type</td>
-                    <td>@rapport.Intitulé</td>
-                    
-                </tr>
-            }
-        </tbody>
-    </table>
-}
 

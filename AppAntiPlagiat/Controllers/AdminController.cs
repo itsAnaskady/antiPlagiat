@@ -680,7 +680,7 @@ namespace AppAntiPlagiat.Controllers
             var pdf = applicationDbContext.Rapports.Find(id);
             if (pdf == null)
             {
-                return RedirectToAction("VosRapports");
+                return RedirectToAction("RechercherRapport");
             }
             return File(pdf.data, "application/pdf", pdf.Intitulé + ".pdf");
         }
@@ -859,6 +859,31 @@ namespace AppAntiPlagiat.Controllers
 
             }
             return Json(gr);
+        }
+        
+        public ActionResult PourcentagePlagiat()
+        {
+            ViewBag.Ltype = "admin";
+            var pp = applicationDbContext.pourcentagePlagiats.FirstOrDefault();
+            return View(pp);
+        }
+
+        [HttpPost]
+        public ActionResult PourcentagePlagiat(PourcentagePlagiat model)
+        {
+            ViewBag.Ltype = "admin";
+            if (ModelState.IsValid)
+            {
+                model.Pourcentage = model.Pourcentage / 100;
+                var p = applicationDbContext.pourcentagePlagiats.Find(model.id);
+                if (p != null)
+                {
+                    p.Pourcentage = model.Pourcentage;
+                    applicationDbContext.SaveChanges();
+                }
+            }
+            
+            return View(model);
         }
     }
 

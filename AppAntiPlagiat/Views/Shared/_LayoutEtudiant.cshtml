@@ -65,7 +65,7 @@
 
                     </div>
                     <div class="info">
-                        <a href=@Url.Action("Profile") asp-controller="Etudiant" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom</a>
+                        <a asp-action="Profile" asp-controller="Etudiant" class="d-block">@dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Nom @dbContext.Utilisateurs.FirstOrDefault(x => x.Email == User.Identity.Name).Prenom</a>
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href=@Url.Action("ImporterRapport") asp-controller="Etudiant" class="nav-link">
+                            <a asp-action="ImporterRapport" asp-controller="Etudiant" class="nav-link">
                                 <i class="nav-icon fas fa-upload"></i>
                                 <p>
                                     Importer un rapport

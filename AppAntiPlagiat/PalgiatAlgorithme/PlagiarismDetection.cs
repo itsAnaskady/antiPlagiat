@@ -34,10 +34,33 @@ using AppAntiPlagiat.Models;
             {
                 similarity = new Cosine().Distance(vector2, vector1);
             }
+            if (similarity < 0)
+            {
+                return 1;
+            }
     
             return similarity;
         }
+        
+        public List<rapportEtPourcentage> rapportEtPourcentages(byte[] pdf) 
+        {
+            var ListeRapports = context.Rapports.Where(x => x.data != pdf).ToList();
+            List<rapportEtPourcentage> liste = new List<rapportEtPourcentage>();
+            if(ListeRapports != null)
+            {
+                foreach(var r in ListeRapports)
+                {
+                    rapportEtPourcentage model = new rapportEtPourcentage()
+                    {
+                        IdRapport = r.Id,
+                        Pplagiat = PlagiatDedeux(pdf,r.data)
+                    };
+                    liste.Add(model);
+                }
 
+            }
+            return liste;
+        }
         public double Plagiat(byte[] pdf)
         {
             var ListeRapports = context.Rapports.Where(x => x.data != pdf).ToList();
@@ -103,27 +126,12 @@ using AppAntiPlagiat.Models;
             }
             return 0;
     }
-        /*static List<string> FindMatchingPhrases(string text1, string text2)
-        {
-            // Split the text into sentences
-            string[] sentences1 = text1.Split('.');
-            string[] sentences2 = text2.Split('.');
+        
+    }
 
-            // Find the matching phrases between the two texts
-            List<string> matches = new List<string>();
-            foreach (string sentence1 in sentences1)
-            {
-                foreach (string sentence2 in sentences2)
-                {
-                    double similarity = new Cosine().Distance(ConvertToFeatureVector(sentence1), ConvertToFeatureVector(sentence2));
-                    if (similarity > 0.9) // Threshold for similarity
-                    {
-                        matches.Add(sentence1.Trim() + " | " + sentence2.Trim());
-                    }
-                }
-            }
-
-            return matches;
-        }*/
+    public class rapportEtPourcentage
+    {
+        public int IdRapport { get; set; }
+        public double Pplagiat { set; get; }
     }
 

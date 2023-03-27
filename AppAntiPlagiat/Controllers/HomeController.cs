@@ -56,11 +56,7 @@ namespace AppAntiPlagiat.Controllers
                     var u = await userManager.FindByEmailAsync(model.Email);
                     string? role = (await userManager.GetRolesAsync(u))[0];
 
-                    if(role== "admin")
-                    {
-                        return RedirectToAction("Dashboard", "Admin");
-                    }
-                    else if(role == "enseignant")
+                    if(role == "enseignant")
                     {
                         return RedirectToAction("Profile", "Enseignant");
                     }
@@ -93,7 +89,37 @@ namespace AppAntiPlagiat.Controllers
 				return View();
 			}
 		}
-		[HttpPost]
+		
+        public IActionResult LoginAdmin()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> LoginAdmin(LoginViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                if (result.Succeeded)
+                {
+                    var u = await userManager.FindByEmailAsync(model.Email);
+                    string? role = (await userManager.GetRolesAsync(u))[0];
+
+                    if (role == "admin")
+                    {
+                        return RedirectToAction("Messages", "Admin");
+                    }
+                    else
+                    {
+                        await signInManager.SignOutAsync();
+                    }
+                }
+                ModelState.AddModelError(String.Empty, "Email ou mot de passe incorrecte.");
+            }
+            return View(model);
+        }
+        [HttpPost]
 		public async Task<IActionResult> LoginEtudiant(LoginViewModel model)
 		{
 			if (ModelState.IsValid)

@@ -1,0 +1,54 @@
+﻿@model LoginViewModel
+@{
+    ViewBag.title = "Login Admin";
+}
+<div class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a><b>Login</b>ADMIN</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Connectez-vous pour démarrer votre session</p>
+
+                <form method="post">
+                    <div class="input-group mb-3">
+                        <input type="email" asp-for="Email" class="form-control" placeholder="Email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Mot de passe">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" asp-for="RememberMe" id="remember">
+                                <label for="remember">
+                                    Souviens de moi
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+                <div class="text text-danger" asp-validation-summary="All"></div>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+</div>
+

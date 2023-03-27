@@ -1,12 +1,8 @@
 ﻿using AppAntiPlagiat.Models;
 using AppAntiPlagiat.ViewModels;
-using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 
@@ -98,13 +94,7 @@ namespace AppAntiPlagiat.Controllers
                 using (var stream = new MemoryStream())
                 {
                     await pdfFile.CopyToAsync(stream);
-                    double poucentage = plagiatAuto(stream.ToArray()) / 100;
-
-                    if (poucentage >= applicationDbContext.pourcentagePlagiats.ToList()[0].Pourcentage)
-                    {
-                        return RedirectToAction("RapportRefusé");
-                    }
-
+                    
                     var rapport = new Rapport
                     {
                         data = stream.ToArray(),
@@ -144,6 +134,10 @@ namespace AppAntiPlagiat.Controllers
                             pourcentagePlagiat = plagiatAuto(rapport.data)
                         };
                         rapportsViewModel.Add(model);
+                        if ((model.pourcentagePlagiat / 100) >= applicationDbContext.pourcentagePlagiats.FirstOrDefault().Pourcentage)
+                        {
+                            ViewBag.Alert = "ICI";
+                        }
                     }
                 }
             }
@@ -196,6 +190,7 @@ namespace AppAntiPlagiat.Controllers
         {
             PlagiarismDetection aP = new PlagiarismDetection(applicationDbContext);
             double poucentagePlagiat = aP.Plagiat(pdf);
+            
 
             return poucentagePlagiat * 100;
         }
@@ -249,5 +244,10 @@ namespace AppAntiPlagiat.Controllers
            return View(new { RappId = RappId,type =type});
         }
        
+        public ActionResult Notification()
+        {
+            ViewBag.Ltype = "etudiant";
+            return View();
+        }
     }
 }

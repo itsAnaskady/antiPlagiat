@@ -49,6 +49,9 @@
             <a  asp-action="Accueil" class="nav-link">Accueil</a>
           </li>
 		  @if(!signInManager.IsSignedIn(User)){
+			 <li class="nav-item">
+				<a asp-action="LoginAdmin" class="nav-link">Espace Admin</a>
+			</li>
 			<li class="nav-item">
 				<a asp-action="LoginEnseignant" class="nav-link">Espace Enseignant</a>
 			</li>
