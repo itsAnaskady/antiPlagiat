@@ -30,13 +30,13 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a asp-action="Dashboard" class="nav-link">Dashboard</a>
+            <a asp-action="RechercherRapport" asp-controller="Admin"  class="nav-link">Les rapports</a>
         <li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a asp-action="Messages" class="nav-link">Messages</a>
+            <a asp-action="Messages" asp-controller="Admin" class="nav-link">Messages</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a asp-action="Accueil" asp-controller="Home" class="nav-link">Accueil</a>
+            <a asp-action="Accueil" asp-controller="Home"  class="nav-link">Accueil</a>
         </li>
     </ul>
     
@@ -87,14 +87,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                              with font-awesome or any other icon font library -->
-                        <li class="nav-item">
-                            <a href=@Url.Action("Dashboard") class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Dashboard 
-                                </p>
-                            </a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
@@ -105,13 +98,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href=@Url.Action("AjouterEnseignant") class="nav-link">
+                                    <a asp-action="AjouterEnseignant" asp-controller="Admin" class="nav-link">
                                         <i class="fas fa-user-plus nav-icon"></i>
                                         <p>Ajouter Enseignant</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href=@Url.Action("RechSuppModEnseignant") class="nav-link">
+                                    <a asp-action="RechSuppModEnseignant" asp-controller="Admin" class="nav-link">
                                         <i class="fas fa-user-edit nav-icon"></i>
                                         <p>Rech + Supp + Mod</p>
                                     </a>
@@ -128,13 +121,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href=@Url.Action("AjouterEtudiant") class="nav-link">
+                                    <a asp-action="AjouterEtudiant" asp-controller="Admin" class="nav-link">
                                         <i class="fas fa-user-plus nav-icon"></i>
                                         <p>Ajouter Etudiant</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href=@Url.Action("RechSuppModEtudiant") class="nav-link">
+                                    <a asp-action="RechSuppModEtudiant" asp-controller="Admin" class="nav-link">
                                         <i class="fas fa-user-edit nav-icon"></i>
                                         <p>Rech + Supp + Mod</p>
                                     </a>
@@ -142,7 +135,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href=@Url.Action("Affectation") class="nav-link">
+                            <a asp-action="Affectation" asp-controller="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-people-arrows"></i>
                                 <p>
                                     Affectation
@@ -150,16 +143,32 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href=@Url.Action("ListeAffectation") class="nav-link">
+                            <a asp-action="ListeAffectation" asp-controller="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-people-arrows"></i>
                                 <p>
                                    Liste des affectations
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a asp-action="RechercherRapport" asp-controller="Admin" class="nav-link">
+                                <i class="nav-icon fas fa-book-open"></i>
+                                <p>
+                                    Les rapports
+                                </p>
+                            </a>
+                        </li>
                   
                         <li class="nav-item">
-                            <a href=@Url.Action("Messages") class="nav-link">
+                            <a asp-action="PourcentagePlagiat" asp-controller="Admin" class="nav-link">
+                                <i class="nav-icon far fa-edit"></i>
+                                <p>
+                                    Pourcentage de plagiat
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Messages" asp-controller="Admin" class="nav-link">
                                 <i class="nav-icon far fa-envelope"></i>
                                 <p>
                                     Messages

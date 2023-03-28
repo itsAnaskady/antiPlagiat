@@ -25,6 +25,7 @@
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 	</environment>
+	@RenderSection("style",false)
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
@@ -48,6 +49,9 @@
             <a  asp-action="Accueil" class="nav-link">Accueil</a>
           </li>
 		  @if(!signInManager.IsSignedIn(User)){
+			 <li class="nav-item">
+				<a asp-action="LoginAdmin" class="nav-link">Espace Admin</a>
+			</li>
 			<li class="nav-item">
 				<a asp-action="LoginEnseignant" class="nav-link">Espace Enseignant</a>
 			</li>
@@ -57,7 +61,7 @@
 		  }
 		  @if(signInManager.IsSignedIn(User) && User.IsInRole("admin")){
 			<li class="nav-item">
-				<a asp-action="Dashboard" asp-controller="admin" class="nav-link">Dashboard</a>
+				<a asp-action="RechercherRapport" asp-controller="admin" class="nav-link">Les rapports</a>
 			</li>
 			<li class="nav-item">
 				<a asp-action="RechSuppModEnseignant" asp-controller="admin" class="nav-link">Gestion Enseignant</a>

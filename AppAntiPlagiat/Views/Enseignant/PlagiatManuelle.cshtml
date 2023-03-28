@@ -1,0 +1,37 @@
+﻿@model List<PlagiatManuelleViewModel>
+@inject ApplicationDbContext db
+@{
+    ViewBag.title = "Plagiat Manuelle";
+}
+<div id="partial-content-container" style="padding : 1%">
+    <div class="card">
+        <h4 class="card-header"><b>Liste des rapports</b></h4>
+        <h4 class="card-header">Voici les 5 premiers rapports qui ont un pourcentage le plus élevé avec ce rapport</h4>
+        <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Étudiant</th>
+                            <th>Type de stage</th>
+                            <th>Intitulé du rapport</th>
+                            <th>Pourcentage de plagiat entre les deux rapports</th>
+                            <th>Téléchargement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in Model)
+                        {
+                        <tr>
+                            @{var rapport = db.Rapports.Find(item.rapportEtPourcentage.IdRapport);}
+                                <td><a href="/Home/Profiles?id=@item.etudiant.Id">@item.etudiant.NomComplet</a></td>
+                                <td>@rapport.Type</td>
+                                <td>@rapport.Intitulé</td>
+                                <td>@item.rapportEtPourcentage.Pplagiat.ToString("0.00")%</td>
+                                <td><a asp-action="DownloadPdf" title="télécharger le rapport" asp-route-id="@item.rapportEtPourcentage.IdRapport">Télécharger</a></td>
+                            </tr>
+                        }
+                     </tbody>
+                </table>
+        </div>
+    </div>
+</div>

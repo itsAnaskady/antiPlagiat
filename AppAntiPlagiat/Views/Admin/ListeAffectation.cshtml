@@ -3,46 +3,43 @@
     ViewBag.Title = "ListeAffectation";
 }
 
-<div class="container mt-4">
+<div style="padding : 1%">
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success">@TempData["SuccessMessage"]</div>
     }
-    <h1 style="color:green">Liste des  Affectations</h1>
-    <hr />
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Etudiant</th>
-                        <th scope="col">Enseignant</th>
-                        <th scope="col">Type de Stage</th>
-                        <th scope="col">Filiere</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+    <div class="card">
+        <h5 class="card-header"><b>Liste des  Affectations</b></h5>
+        <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
                         <tr>
-                            <td>@item.EtudiantNom @item.EtudiantPrenom</td>
-                            <td>@item.EnseignantNom @item.EnseignantPrenom</td>
-                            <td>@item.TypeStage</td>
-                            <td>@item.EtudiantFiliere</td>
-                            <td>
-                                @using (Html.BeginForm("SupprimerAffectation", "Admin", new { id = item.Id }, FormMethod.Post)) 
-{
-                                <button type="submit"  class=" delete-button btn btn-danger">Supprimer</button>
-}
-                            <td>
-                                <a asp-action="Modifier" asp-route-id="@item.Id" class="btn btn-primary">Modifier</a>
-                            </td>
-                               
-                            </td>
+                            <th scope="col">Etudiant</th>
+                            <th scope="col">Enseignant</th>
+                            <th scope="col">Type de Stage</th>
+                            <th scope="col">Filiere</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><a href="/Home/Profiles?id=@item.etudiantID">@item.EtudiantNom @item.EtudiantPrenom</a></td>
+                                <td><a href="/Home/Profiles?id=@item.enseignantID">@item.EnseignantNom @item.EnseignantPrenom</a></td>
+                                <td>@item.TypeStage</td>
+                                <td>@item.EtudiantFiliere</td>
+                                <td>
+                                    @using (Html.BeginForm("SupprimerAffectation", "Admin", new { id = item.Id }, FormMethod.Post)) 
+                                    {
+                                        <button type="submit"  class=" delete-button btn btn-danger">Supprimer</button>
+                                    }      
+                                <td>
+                                    <a asp-action="Modifier" asp-route-id="@item.Id" class="btn btn-primary">Modifier</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
         </div>
     </div>
 </div>

@@ -1,53 +1,67 @@
-﻿@model Rapport
-
+﻿@model ImporterRapportViewModel
+@inject ApplicationDbContext db
 @{
     ViewBag.Title = "Déposer un rapport";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="bg-primary bg-light text-dark text-center py-3 ">
-                <h1>Bienvenue sur la page de Disposition  des Rapports:</h1>
+<div id="partial-content-container" style="padding : 2%">
+    <div class="card">
+        <div class="card-header">
+            <h5><b>Bienvenue sur la page de Disposition  des Rapports</b></h5>
+        </div>
+        <div class="card-header">
+            <div class="row">
+                <i class="icon fas fa-exclamation-triangle"></i>
+                <h6>Le pourcentage de plagiat de votre rapport ne doit pas dépasser @(db.pourcentagePlagiats.FirstOrDefault().Pourcentage * 100)%</h6>
             </div>
         </div>
-    </div>
-    </div>
-@using (Html.BeginForm("DeposerRapp", "Etudiant", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
-{
-    @if (TempData["SuccesMessage"] != null)
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-success">@TempData["SuccesMessage"]</div>
+            <div class="card-body">
+            @using (Html.BeginForm("DeposerRapp", "Etudiant", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+            {
+                @if (TempData["SuccesMessage"] != null)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-success">@TempData["SuccesMessage"]</div>
+                        </div>
+                    </div>
+                }
+                @Html.AntiForgeryToken()
+
+                @if(Model.TypeStage.Count != 0){
+        
+                    <div class="form-group">
+                        <label for="pdfFile">Importer votre rapport :</label>
+                        <div class="col-md-9 col-sm-9">
+                            <input type="file" name="pdfFile" accept=".pdf" class="form-control-file" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9">
+                            <select asp-for="@Model.Rapport.Type" class="form-control">
+                                <option selected disabled>-- selectionner le type de stage --</option>
+                                @foreach (string type in Model.TypeStage)
+                                {
+                                    <option value="@type">@type</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-sm-offset-3 col-md-9 col-sm-9">
+                            <button type="submit" class="btn btn-primary">Déposer le rapport</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p>Vous n'avez aucun rapport à déposer !</p>
+                }
+            }
             </div>
-        </div>
-    }
-    @Html.AntiForgeryToken()
-
-    <div class="form-group">
-        <label for="pdfFile">Importer votre rapport :</label>
-        <div class="col-md-9 col-sm-9">
-            <input type="file" name="pdfFile" accept=".pdf" class="form-control-file" />
-        </div>
     </div>
-    <div class="form-group">
-        <div class="col-md-9 col-sm-9">
-            <select asp-for="Type" class="form-control">
-                <option selected disabled>-- selectionner le type de stage --</option>
-                <option value="Initiation">Initiation</option>
-                <option value="PFA">PFA</option>
-                <option value="PFE">PFE</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-3 col-sm-offset-3 col-md-9 col-sm-9">
-            <button type="submit" class="btn btn-primary">Déposer le rapport</button>
-        </div>
-    </div>
-}
+</div>
 @section style{
     <style>
         .form-horizontal .control-label {

@@ -1,0 +1,39 @@
+﻿@model PourcentagePlagiat
+@{
+    ViewBag.title = "Pourcentage Plagiat";
+}
+<div id="partial-content-container" style="padding : 2%">
+    <div class="card">
+        <h5 class="card-header"><b>Changer le pourcentage de plagiat</b></h5>
+        <h6 class="card-header">le pourcentage de plagiat est le pourcentage à ne pas dépasser par les rapports déposés !</h6>
+        <div class="card-body">
+            <form  method="post">
+                <div class="form-group">
+                    <label asp-for="Pourcentage">Le pourcentage actuel est :</label>
+                    <input type="text" asp-for="Pourcentage" id="estDouble" value="@(Model.Pourcentage*100)" placeholder="Inserer un pourcentage de plagiat" />
+                    <label>%</label>
+                </div>
+                <div class="form-group">
+                    <input hidden asp-for="id" value="@Model.id"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" onclick="confirm('Voulez-vous vraiment modifier le pourcentage de plagiat ?')" class="btn btn-block btn-success">Appliquer</button>
+                </div>
+                <div class="text text-danger" asp-validation-summary="All"></div>
+            </form>
+        </div> 
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#estDouble').keypress(function (event) {
+                var charCode = (event.which) ? event.which : event.keyCode;
+                if (charCode != 44 && (charCode < 48 || charCode > 57)) {
+                    event.preventDefault();
+                    $(this).val($(this).val().replace(String.fromCharCode(charCode), ''));
+                }
+            });
+        });
+    </script>
+}
