@@ -106,7 +106,7 @@ namespace AppAntiPlagiat.Controllers
                         Validé = false,
                     };
                     applicationDbContext.Rapports.Add(rapport);
-                    var etud = applicationDbContext.Utilisateurs.Find(User);
+                    var etud = applicationDbContext.Utilisateurs.Where(x=> x.UserName==User.Identity.Name).FirstOrDefault();
                     string idEnseignant = applicationDbContext.Encadre.Where(x => x.EtudiantId == etud.Id && x.TypeStage == rapport.Type).FirstOrDefault().EnseignantId; 
                     Notification notification = new Notification()
                     {

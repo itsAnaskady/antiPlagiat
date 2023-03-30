@@ -2,4 +2,66 @@
 @{
     ViewBag.Title = "Accueil";
 }
-<h1>Accueil</h1>
+
+<link rel="stylesheet" href="~/css/home.css" />
+<section class="main" style="color:white">
+    <div>
+        <br />
+        <h2 style="text-shadow: 2px 2px 5px #000000"><strong><span>EDUCATION IS THE KEY</span></></strong></h2>
+        <h2 style="text-shadow: 2px 2px 5px #000000"><strong>       TO YOUR SUCCESS </strong>  </h2>
+       
+    </div>
+    <div class="containerss">
+        <div class="blink">
+        <a  class="main-btn">Bienvenue dans la plateforme AntiPlagiat!</a>
+        </div>
+    </div>
+</section>
+
+<section class="cards" id="services">
+    <h2 class="title">Services</h2>
+    <div class="content">
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-briefcase fa-beat"></i>
+            </div>
+            <div class="info">
+                <h3>Espace Enseignant</h3>
+                <a asp-action="LoginEnseignant" asp-controller="Home" class="nav-link">
+
+                    <p>
+                        Login
+                    </p>
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="info">
+                <h3>Espace Etudiant</h3>
+                <a asp-action="LoginEtudiant" asp-controller="Home" class="nav-link">
+                    
+                    <p>
+                        Login
+                    </p>
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <div class="info">
+                <h3>Espace Admin</h3>
+                <a asp-action="LoginAdmin" asp-controller="Home" class="nav-link">
+
+                    <p>
+                        Login
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

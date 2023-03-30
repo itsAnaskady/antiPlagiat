@@ -1,0 +1,70 @@
+﻿.main {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    background-image: url('/images/grad.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.info {
+    text-align: center;
+}
+
+    .info h3 {
+        color: #3a6cf4;
+        font-size: 1.2em;
+        font-weight: 700;
+        margin: 10px;
+    }
+.content {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.card {
+    background-color: #fff;
+    width: 21.25em;
+    box-shadow: 0 5px 25px rgba(1 1 1 / 15%);
+    border-radius: 10px;
+    padding: 25px;
+    margin: 15px;
+    transition: 0.7s ease;
+}
+.main-btn {
+    color: #fff;
+    background-color: #3a6cf4;
+    
+    text-decoration: wavy;
+    font-size: 1.1em;
+    font-weight: 600;
+    display: inline-block;
+    padding: 0.9375em 2.1875em;
+    letter-spacing: 1px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    transition: 0.7s ease;
+    }
+.blink {
+    animation: blink 3s linear infinite;
+}
+
+    .card:hover {
+        transform: scale(1.1);
+    }
+
+    .card .icon {
+        color: #3a6cf4;
+        font-size: 8em;
+        text-align: center;
+    }
+.containerss {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 30px; /* ajustez la taille de police selon vos besoins */
+    font-weight: bold;
+    
+}
