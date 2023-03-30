@@ -100,9 +100,7 @@
 				<a asp-action="Contact" class="nav-link">Contact</a>
 			  </li>
 		  }
-          <li class="nav-item">
-            <a asp-action="Détails" class="nav-link">Détails</a>
-          </li>
+          
         </ul>
 		<ul class="navbar-nav ml-auto">
 		@if(signInManager.IsSignedIn(User)){
@@ -163,7 +161,7 @@
 									<i class="fa fa-caret-right" aria-hidden="true"></i><a asp-action="ListeEnseignants" asp-controller="etudiant">Liste des enseignants</a><br />
 								}
 								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Contact" >Contact</a><br>
-								<i class="fa fa-caret-right" aria-hidden="true"></i> <a asp-action="Détails">Détails</a><br>
+								
 							</div>
 						</aside>
 					</div>

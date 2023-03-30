@@ -143,10 +143,7 @@ namespace AppAntiPlagiat.Controllers
 			}
 			return View(model);
 		}
-		public IActionResult Détails()
-        {
-            return View();
-        }
+		
         public IActionResult Contact()
         {
             return View();
