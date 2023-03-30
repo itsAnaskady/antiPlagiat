@@ -405,7 +405,7 @@ namespace AppAntiPlagiat.Controllers
         {
             string id = userManager.GetUserId(User);
             var notifications = applicationDbContext.Notifications
-                                        .Where(x => x.UserId == id)
+                                        .Where(x => x.UserIdDesti == id)
                                         .OrderByDescending(m => m.DateNotif)
                                         .Skip(skip)
                                         .Take(pageSize)
