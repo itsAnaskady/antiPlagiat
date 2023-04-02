@@ -15,8 +15,8 @@ namespace AppAntiPlagiat.Models
         public byte[] data { get; set; }
 
         public DateTime DateDepot { get; set; }
-        public string EtudiantId { get; set; }
-        public Utilisateur Etudiant { get; set; }
+        public string? EtudiantId { get; set; }
+        public Utilisateur? Etudiant { get; set; }
 
 
 

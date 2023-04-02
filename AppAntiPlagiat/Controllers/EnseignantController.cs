@@ -181,12 +181,23 @@ namespace AppAntiPlagiat.Controllers
                         Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && x.TypeStage == item.Type).FirstOrDefault(),
                         Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%",
                     };
-                    model.filière = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Filiere;
-                    model.niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Niveau;
-                    if (applicationDbContext.Users.Where(x => x.Id == model.Encadre.EnseignantId).FirstOrDefault() != null)
+                    if (model.Encadre != null)
                     {
-                        model.enseignantnom = model.Encadre.Enseignant.Nom + " " + model.Encadre.Enseignant.Prenom;
+                        model.filière = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Filiere;
+                        model.niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Niveau;
+                        if (applicationDbContext.Users.Where(x => x.Id == model.Encadre.EnseignantId).FirstOrDefault() != null)
+                        {
+                            model.enseignantnom = model.Encadre.Enseignant.Nom + " " + model.Encadre.Enseignant.Prenom;
+                        }
                     }
+                    else
+                    {
+                        model.filière = "Inconnue";
+                        model.niveau = "Inconnu";
+                        model.enseignantnom = "Inconnu";
+                    }
+
+
                     model.dateDepot = "" + model.rapport.DateDepot;
 
                     if (model.rapport.DateModif != null)
@@ -251,8 +262,16 @@ namespace AppAntiPlagiat.Controllers
                         Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && x.TypeStage == item.Type).FirstOrDefault(),
                         Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%",
                     };
-                    model.filière = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Filiere;
-                    model.niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Niveau;
+                    if (model.Encadre != null)
+                    {
+                        model.filière = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Filiere;
+                        model.niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Niveau;
+                    }
+                    else
+                    {
+                        model.filière = "Inconnue";
+                        model.niveau = "Inconnu";
+                    }
                     if (applicationDbContext.Users.Where(x => x.Id == model.Encadre.EnseignantId).FirstOrDefault() != null)
                     {
                         model.enseignantnom = model.Encadre.Enseignant.Nom + " " + model.Encadre.Enseignant.Prenom;
@@ -285,8 +304,16 @@ namespace AppAntiPlagiat.Controllers
                         Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && x.TypeStage == item.Type).FirstOrDefault(),
                         Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%",
                     };
-                    model.filière = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Filiere;
-                    model.niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Niveau;
+                    if (model.Encadre != null)
+                    {
+                        model.filière = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Filiere;
+                        model.niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == model.Encadre.EtudiantId).FirstOrDefault().Niveau;
+                    }
+                    else
+                    {
+                        model.filière = "Inconnue";
+                        model.niveau = "Inconnu";
+                    }
                     if (applicationDbContext.Users.Where(x => x.Id == model.Encadre.EnseignantId).FirstOrDefault() != null)
                     {
                         model.enseignantnom = model.Encadre.Enseignant.Nom + " " + model.Encadre.Enseignant.Prenom;
@@ -322,7 +349,7 @@ namespace AppAntiPlagiat.Controllers
         }
         public IActionResult RechercherRapport()
         {
-            ViewBag.Ltype = "enseignant";
+            ViewBag.Ltype = "admin";
             var rapport = applicationDbContext.Rapports.ToList();
             List<GestionRapportViewModel> gr = new List<GestionRapportViewModel>();
 
@@ -330,15 +357,30 @@ namespace AppAntiPlagiat.Controllers
             {
                 foreach (Rapport item in rapport)
                 {
-                    GestionRapportViewModel model = new GestionRapportViewModel()
+                    if (item.EtudiantId != null)
                     {
-                        rapport = item,
-                        Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && item.Type == x.TypeStage).FirstOrDefault(),
-                        filière = applicationDbContext.Utilisateurs.Where(x => x.Id == item.EtudiantId).FirstOrDefault().Filiere,
-                        niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == item.EtudiantId).FirstOrDefault().Niveau,
-                        Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%"
-                    };
-                    gr.Add(model);
+                        GestionRapportViewModel model = new GestionRapportViewModel()
+                        {
+                            rapport = item,
+                            Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && item.Type == x.TypeStage).FirstOrDefault(),
+                            filière = applicationDbContext.Utilisateurs.Where(x => x.Id == item.EtudiantId).FirstOrDefault().Filiere,
+                            niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == item.EtudiantId).FirstOrDefault().Niveau,
+                            Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%"
+                        };
+                        gr.Add(model);
+                    }
+                    else
+                    {
+                        GestionRapportViewModel model = new GestionRapportViewModel()
+                        {
+                            rapport = item,
+                            Encadre = null,
+                            filière = "Inconnue",
+                            niveau = "Inconnu",
+                            Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%"
+                        };
+                        gr.Add(model);
+                    }
                 }
             }
 

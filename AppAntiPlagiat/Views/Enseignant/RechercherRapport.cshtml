@@ -64,14 +64,6 @@
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            <button type="button" title="Séléctionner tout" class="btn btn-default btn-sm checkbox-toggle">
-                                                <i class="far fa-square"></i>
-                                            </button>
-                                            <button type="button" id="delete-selected-button" title="Supprimer les séléctionnes" class="btn btn-default btn-sm">
-                                                <i class="far fa-trash-alt"></i>
-                                            </button>
-                                        </th>
                                         <th>Intitulé</th>
                                         <th>type</th>
                                         <th>Filière</th>
@@ -96,16 +88,10 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" id="check1" value="@m.rapport.Id" class="message-checkbox">
-                                                        <label for="check1"></label>
-                                                    </div>
-                                                </td>
-                                                <td>
                                                     @m.rapport.Intitulé
                                                 </td>
                                                 <td>
-                                                    @m.Encadre.TypeStage
+                                                    @m.rapport.Type
                                                 </td>
                                                 <td>
                                                     @m.filière
@@ -128,7 +114,8 @@
 
                                                 </td>
                                                 <td>
-                                                    @if (m.Encadre.Etudiant != null)
+
+                                                    @if (m.Encadre != null && m.Encadre.Etudiant != null)
                                                     {
                                                         <a href="/Home/Profiles?id=@m.Encadre.Etudiant.Id">@m.Encadre.Etudiant.Nom @m.Encadre.Etudiant.Prenom</a>
                                                     }
@@ -140,7 +127,14 @@
                                                 </td>
                                                 <td>
                                                     @{
-                                                        var enseignant = dbContext.Users.Where(x => x.Id == m.Encadre.EnseignantId).FirstOrDefault();
+                                                        var enseignant = dbContext.Users.Where(x => x.Id == "rien").FirstOrDefault();
+
+                                                        if (m.Encadre != null)
+                                                        {
+                                                            enseignant = dbContext.Users.Where(x => x.Id == m.Encadre.EnseignantId).FirstOrDefault();
+                                                        }
+
+
                                                     }
                                                     @if (enseignant != null)
                                                     {
@@ -188,79 +182,13 @@
 </div>
 @section scripts{
     <script>
-        $(function () {
-            //Enable check and uncheck all functionality
-            $('.checkbox-toggle').click(function () {
-                var clicks = $(this).data('clicks')
-                if (clicks) {
-                    //Uncheck all checkboxes
-                    $('.t_body input[type=\'checkbox\']').prop('checked', false)
-                    $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
-                } else {
-                    //Check all checkboxes
-                    $('.t_body input[type=\'checkbox\']').prop('checked', true)
-                    $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
-                }
-                $(this).data('clicks', !clicks)
-            })
-        })
-    </script>
-    <script>
-        //delete selected msgs
-        $(document).ready(function () {
-            $("#delete-selected-button").on("click", function () {
-                var confirmed = confirm("Voulez-vous vraiment supprimer les rapports séléctionnés ?")
-                if (confirmed) {
-                    var selectedIds = $(".message-checkbox:checked").map(function () {
-                        return $(this).val();
-                    }).get();
-
-                    $.ajax({
-                        url: "/Enseignant/DeleteSelectedRapports",
-                        type: "POST",
-                        data: { rapportIds: selectedIds },
-                        success: function (data) {
-                            // Handle success
-                            location.reload();
-                        },
-                        error: function (xhr, status, error) {
-                            console.log("Error: " + error);
-                        }
-                    });
-                }
-                else {
-                    var options = {
-                        "closeButton": false,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": false,
-                        "positionClass": "toast-bottom-center",
-                        "preventDuplicates": false,
-                        "onclick": null,
-                        "showDuration": "300",
-                        "hideDuration": "1000",
-                        "timeOut": "2000",
-                        "extendedTimeOut": "1000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "fadeIn",
-                        "hideMethod": "fadeOut"
-                    };
-                    toastr.options = options;
-                    toastr.info('Opération annulée.');
-                }
-            });
-
-        });
-    </script>
-    <script>
         $(document).ready(function () {
             $(".filtre").change(function () {
                 var f = $("#filiere-filtre").find("option:selected").text();
                 var n = $("#niveau-filtre").find("option:selected").text();
                 var t = $("#type-filtre").find("option:selected").text();
                 $.ajax({
-                    url: "/Enseignant/fitrageRapport1?type=" + encodeURIComponent(t) + "&niveau=" + encodeURIComponent(n) + "&filiere=" + encodeURIComponent(f),
+                    url: "/enseignant/fitrageRapport1?type=" + encodeURIComponent(t) + "&niveau=" + encodeURIComponent(n) + "&filiere=" + encodeURIComponent(f),
                     type: "GET",
                     success: function (response) {
                         $("#info b").remove();
@@ -271,14 +199,8 @@
                             for (var i = 0; i < response.length; i++) {
                                 var row = response[i];
                                 rowsHtml += "<tr>" +
-                                    "<td>" +
-                                    "<div class=\"icheck-primary\">" +
-                                    "<input type=\"checkbox\" id=\"check1\" value=\"" + row.rapport.id + "\" class=\"message-checkbox\"/>" +
-                                    "<label for=\"check1\"></label>" +
-                                    "</div>" +
-                                    "</td>" +
                                     "<td>" + row.rapport.intitulé + "</td>" +
-                                    "<td>" + row.encadre.typeStage + "</td>" +
+                                    "<td>" + row.rapport.type + "</td>" +
                                     "<td>" + row.filière + "</td>" +
                                     "<td>" + row.niveau + "</td>" +
                                     "<td>" + row.dateDepot + "</td>";
@@ -289,14 +211,18 @@
                                     rowsHtml += "<td><span>aucune modification</span></td>";
                                 }
 
-                                if (row.encadre.etudiant != null) {
-                                    rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.etudiant.id + "\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
-                                }
-                                else {
+                                if (row.encadre != null) {
+                                    if (row.encadre.etudiant != null) {
+                                        rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.etudiant.id + "\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
+                                    }
+                                    else {
+                                        rowsHtml += "<td><p>Inconnu</p></td>";
+                                    }
+                                } else {
                                     rowsHtml += "<td><p>Inconnu</p></td>";
                                 }
 
-                                if (row.enseignantnom != null) {
+                                if (row.enseignantnom != "Inconnu") {
                                     rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.enseignant.id + "\">" + row.enseignantnom + "</a></td>";
                                 }
                                 else {
@@ -336,7 +262,7 @@
                 var inp = $("#recherche").val();
                 if (inp.length != 0) {
                     $.ajax({
-                        url: "/Enseignant/filtrageParInput?input=" + encodeURIComponent(inp),
+                        url: "/enseignant/filtrageParInput?input=" + encodeURIComponent(inp),
                         type: "GET",
                         success: function (response) {
                             $("#info b").remove();
@@ -346,14 +272,8 @@
                                 for (var i = 0; i < response.length; i++) {
                                     var row = response[i];
                                     rowsHtml += "<tr>" +
-                                        "<td>" +
-                                        "<div class=\"icheck-primary\">" +
-                                        "<input type=\"checkbox\" id=\"check1\" value=\"" + row.rapport.id + "\" class=\"message-checkbox\"/>" +
-                                        "<label for=\"check1\"></label>" +
-                                        "</div>" +
-                                        "</td>" +
                                         "<td>" + row.rapport.intitulé + "</td>" +
-                                        "<td>" + row.encadre.typeStage + "</td>" +
+                                        "<td>" + row.rapport.type + "</td>" +
                                         "<td>" + row.filière + "</td>" +
                                         "<td>" + row.niveau + "</td>" +
                                         "<td>" + row.dateDepot + "</td>";
@@ -364,14 +284,19 @@
                                         rowsHtml += "<td><span>aucune modification</span></td>";
                                     }
 
-                                    if (row.encadre.etudiant != null) {
-                                        rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.etudiant.id + "\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
-                                    }
-                                    else {
+                                    if (row.encadre != null) {
+                                        if (row.encadre.etudiant != null) {
+                                            rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.etudiant.id + "\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
+                                        }
+                                        else {
+                                            rowsHtml += "<td><p>Inconnu</p></td>";
+                                        }
+                                    } else {
                                         rowsHtml += "<td><p>Inconnu</p></td>";
                                     }
 
-                                    if (row.enseignantnom != null) {
+
+                                    if (row.enseignantnom != "Inconnu") {
                                         rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.enseignant.id + "\">" + row.enseignantnom + "</a></td>";
                                     }
                                     else {
@@ -403,7 +328,7 @@
                     });
                 } else {
                     $.ajax({
-                        url: "/Enseignant/getAllRapport",
+                        url: "/enseignant/getAllRapport",
                         type: "GET",
                         success: function (response) {
                             $("#info b").remove();
@@ -413,14 +338,8 @@
                                 for (var i = 0; i < response.length; i++) {
                                     var row = response[i];
                                     rowsHtml += "<tr>" +
-                                        "<td>" +
-                                        "<div class=\"icheck-primary\">" +
-                                        "<input type=\"checkbox\" id=\"check1\" value=\"" + row.rapport.id + "\" class=\"message-checkbox\"/>" +
-                                        "<label for=\"check1\"></label>" +
-                                        "</div>" +
-                                        "</td>" +
                                         "<td>" + row.rapport.intitulé + "</td>" +
-                                        "<td>" + row.encadre.typeStage + "</td>" +
+                                        "<td>" + row.rapport.type + "</td>" +
                                         "<td>" + row.filière + "</td>" +
                                         "<td>" + row.niveau + "</td>" +
                                         "<td>" + row.dateDepot + "</td>";

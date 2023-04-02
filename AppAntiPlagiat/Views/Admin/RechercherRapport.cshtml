@@ -105,7 +105,7 @@
                                                         @m.rapport.Intitulé
                                                     </td>
                                                     <td>
-                                                        @m.Encadre.TypeStage
+                                                        @m.rapport.Type
                                                     </td>
                                                     <td>
                                                         @m.filière
@@ -127,7 +127,8 @@
                                                     
                                                     </td>
                                                     <td>
-                                                        @if (m.Encadre.Etudiant != null)
+
+                                                        @if (m.Encadre != null && m.Encadre.Etudiant != null)
                                                         {
                                                             <a href="/Home/Profiles?id=@m.Encadre.Etudiant.Id">@m.Encadre.Etudiant.Nom @m.Encadre.Etudiant.Prenom</a>
                                                         }
@@ -138,9 +139,16 @@
                                                     
                                                     </td>
                                                     <td>
-                                                        @{
-                                                            var enseignant = dbContext.Users.Where(x => x.Id == m.Encadre.EnseignantId).FirstOrDefault();
+                                                    @{
+                                                        var enseignant = dbContext.Users.Where(x => x.Id == "rien").FirstOrDefault();
+
+                                                        if(m.Encadre != null)
+                                                        {
+                                                            enseignant = dbContext.Users.Where(x => x.Id == m.Encadre.EnseignantId).FirstOrDefault();
                                                         }
+                                                       
+
+                                                    }
                                                         @if(enseignant != null)
                                                         {
                                                             <a href="/Home/Profiles?id=@enseignant.Id">@enseignant.Nom @enseignant.Prenom</a>
@@ -155,11 +163,11 @@
                                                     </td>
                                                     <td>
                                                         @if(@m.rapport.Validé){
-                                                        <span style="color:forestgreen">Validé</span>
+                                                            <span style="color:forestgreen">Validé</span>
                                                         }
                                                         else
                                                         {
-                                                        <span style="color:darkgoldenrod">en cours de vérification</span>
+                                                            <span style="color:darkgoldenrod">en cours de vérification</span>
                                                         }
                                                     </td>
                                                     <td><a asp-action="DownloadPdf" title="télécharger le rapport" asp-route-id="@m.rapport.Id">Télécharger</a></td>
@@ -276,9 +284,9 @@
                                                             "</div>"+
                                                         "</td>"+
                                                         "<td>"+row.rapport.intitulé+"</td>"+
-                                                        "<td>"+row.encadre.typeStage+"</td>"+
-                                                        "<td>"+row.filière+"</td>"+
-                                                        "<td>"+row.niveau+"</td>"+
+                                                        "<td>"+row.rapport.type+"</td>"+
+                                                         "<td>" + row.filière + "</td>"+
+                                                         "<td>"+row.niveau+"</td>"+
                                                         "<td>"+row.dateDepot+"</td>";
 
                                         if(row.rapport.dateModif != null)
@@ -288,16 +296,20 @@
                                             rowsHtml += "<td><span>aucune modification</span></td>";
                                         }
 
-                                        if (row.encadre.etudiant != null)
-                                        {
-                                            rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.etudiant.id + "\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
-                                        }
-                                        else
-                                        {
+                                        if(row.encadre != null){
+                                            if (row.encadre.etudiant != null)
+                                            {
+                                                rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.etudiant.id + "\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
+                                            }
+                                            else
+                                            {
+                                                rowsHtml += "<td><p>Inconnu</p></td>";
+                                            }
+                                        }else{
                                             rowsHtml += "<td><p>Inconnu</p></td>";
                                         }
 
-                                        if (row.enseignantnom != null)
+                                        if (row.enseignantnom != "Inconnu")
                                         {
                                             rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.enseignant.id + "\">" + row.enseignantnom + "</a></td>";
                                         }
@@ -358,7 +370,7 @@
                                         "</div>" +
                                         "</td>" +
                                         "<td>" + row.rapport.intitulé + "</td>" +
-                                        "<td>" + row.encadre.typeStage + "</td>" +
+                                        "<td>" + row.rapport.type + "</td>" +
                                         "<td>" + row.filière + "</td>" +
                                         "<td>" + row.niveau + "</td>" +
                                         "<td>" + row.dateDepot + "</td>";
@@ -369,14 +381,21 @@
                                         rowsHtml += "<td><span>aucune modification</span></td>";
                                     }
 
-                                    if (row.encadre.etudiant != null) {
-                                        rowsHtml += "<td><a href=\"/Home/Profiles?id="+row.encadre.etudiant.id+"\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
-                                    }
-                                    else {
-                                        rowsHtml += "<td><p>Inconnu</p></td>";
-                                    }
+                                    if(row.encadre != null){
+                                            if (row.encadre.etudiant != null)
+                                            {
+                                                rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.etudiant.id + "\">" + row.encadre.etudiant.nom + " " + row.encadre.etudiant.prenom + "</a></td>";
+                                            }
+                                            else
+                                            {
+                                                rowsHtml += "<td><p>Inconnu</p></td>";
+                                            }
+                                        }else{
+                                            rowsHtml += "<td><p>Inconnu</p></td>";
+                                        }
 
-                                    if (row.enseignantnom != null) {
+
+                                    if (row.enseignantnom != "Inconnu") {
                                         rowsHtml += "<td><a href=\"/Home/Profiles?id=" + row.encadre.enseignant.id + "\">" + row.enseignantnom + "</a></td>";
                                     }
                                     else {
