@@ -706,7 +706,7 @@ namespace AppAntiPlagiat.Controllers
                             Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && item.Type == x.TypeStage).FirstOrDefault(),
                             filière = applicationDbContext.Utilisateurs.Where(x => x.Id == item.EtudiantId).FirstOrDefault().Filiere,
                             niveau = applicationDbContext.Utilisateurs.Where(x => x.Id == item.EtudiantId).FirstOrDefault().Niveau,
-                            Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%"
+                            Pplagiat = plagiatAuto(item.Id).ToString("0.00") + "%"
                         };
                         gr.Add(model);
                     }
@@ -718,7 +718,7 @@ namespace AppAntiPlagiat.Controllers
                             Encadre = null,
                             filière = "Inconnue",
                             niveau = "Inconnu",
-                            Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%"
+                            Pplagiat = plagiatAuto(item.Id).ToString("0.00") + "%"
                         };
                         gr.Add(model);
                     }
@@ -745,10 +745,10 @@ namespace AppAntiPlagiat.Controllers
             }
             return RedirectToAction("RechercherRapport");
         }
-        public double plagiatAuto(byte[] pdf)
+        public double plagiatAuto(int id)
         {
             PlagiarismDetection aP = new PlagiarismDetection(applicationDbContext);
-            double poucentagePlagiat = aP.Plagiat(pdf);
+            double poucentagePlagiat = aP.Plagiat(id);
 
             return poucentagePlagiat * 100;
         }
@@ -786,7 +786,7 @@ namespace AppAntiPlagiat.Controllers
                     {
                         rapport = item,
                         Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && x.TypeStage == item.Type).FirstOrDefault(),
-                        Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%",
+                        Pplagiat = plagiatAuto(item.Id).ToString("0.00") + "%",
                     };
                     if (model.Encadre != null)
                     {
@@ -868,7 +868,7 @@ namespace AppAntiPlagiat.Controllers
                     {
                         rapport = item,
                         Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && x.TypeStage == item.Type).FirstOrDefault(),
-                        Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%",
+                        Pplagiat = plagiatAuto(item.Id).ToString("0.00") + "%",
                     };
                     if (model.Encadre != null)
                     {
@@ -910,7 +910,7 @@ namespace AppAntiPlagiat.Controllers
                     {
                         rapport = item,
                         Encadre = applicationDbContext.Encadre.Where(x => x.EtudiantId == item.EtudiantId && x.TypeStage == item.Type).FirstOrDefault(),
-                        Pplagiat = plagiatAuto(item.data).ToString("0.00") + "%",
+                        Pplagiat = plagiatAuto(item.Id).ToString("0.00") + "%",
                     };
                     if (model.Encadre != null)
                     {

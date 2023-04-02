@@ -143,7 +143,7 @@ namespace AppAntiPlagiat.Controllers
                         RapportViewModel model = new RapportViewModel()
                         {
                             rapport = rapport,
-                            pourcentagePlagiat = plagiatAuto(rapport.data)
+                            pourcentagePlagiat = plagiatAuto(rapport.Id)
                         };
                         rapportsViewModel.Add(model);
                         if ((model.pourcentagePlagiat / 100) >= applicationDbContext.pourcentagePlagiats.FirstOrDefault().Pourcentage)
@@ -198,10 +198,10 @@ namespace AppAntiPlagiat.Controllers
             }
             return View();
         }
-        public double plagiatAuto(byte[] pdf)
+        public double plagiatAuto(int id)
         {
             PlagiarismDetection aP = new PlagiarismDetection(applicationDbContext);
-            double poucentagePlagiat = aP.Plagiat(pdf);
+            double poucentagePlagiat = aP.Plagiat(id);
             
 
             return poucentagePlagiat * 100;

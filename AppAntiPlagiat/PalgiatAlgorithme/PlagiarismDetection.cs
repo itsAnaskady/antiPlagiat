@@ -28,13 +28,13 @@ using AppAntiPlagiat.Models;
             double similarity;
             
             if (vector1.Length < vector2.Length) {
-                similarity = new Cosine().Distance(vector1, vector2);
+                similarity = new Euclidean().Distance(vector1, vector2);
             }
             else
             {
-                similarity = new Cosine().Distance(vector2, vector1);
+                similarity = new Euclidean().Distance(vector2, vector1);
             }
-            if (similarity < 0)
+            if (similarity <= 0 )
             {
                 return 1;
             }
@@ -42,9 +42,10 @@ using AppAntiPlagiat.Models;
             return similarity;
         }
         
-        public List<rapportEtPourcentage> rapportEtPourcentages(byte[] pdf) 
+        public List<rapportEtPourcentage> rapportEtPourcentages(int id) 
         {
-            var ListeRapports = context.Rapports.Where(x => x.data != pdf).ToList();
+            var ListeRapports = context.Rapports.Where(x => x.Id != id).ToList();
+            byte[] pdf = context.Rapports.Find(id).data;
             List<rapportEtPourcentage> liste = new List<rapportEtPourcentage>();
             if(ListeRapports != null)
             {
@@ -61,9 +62,10 @@ using AppAntiPlagiat.Models;
             }
             return liste;
         }
-        public double Plagiat(byte[] pdf)
+        public double Plagiat(int id)
         {
-            var ListeRapports = context.Rapports.Where(x => x.data != pdf).ToList();
+            byte[] pdf = context.Rapports.Find(id).data;
+            var ListeRapports = context.Rapports.Where(x => x.Id != id).ToList();
             if (ListeRapports != null)
             {
                 var similarities = new List<double>();
@@ -92,19 +94,18 @@ using AppAntiPlagiat.Models;
             return text;
         }
 
-        public double[] ConvertToFeatureVector(string text)
-        {
-            // Split the text into individual words and count their frequencies
-            string[] words = text.Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            int[] frequencies = words.GroupBy(x => x).Select(x => x.Count()).ToArray();
-
-            // Normalize the frequencies to obtain a feature vector
-            double[] vector = frequencies.Select(x => (double)x / words.Length).ToArray();
-
-            return vector;
-        }
+    public double[] ConvertToFeatureVector(string text)
+    {
         
-        public double PlagiatAutoExeption(int rappID, byte[] pdf)
+        string[] words = text.Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        int[] frequencies = words.GroupBy(x => x).Select(x => x.Count()).ToArray();
+
+        
+        double[] vector = frequencies.Select(x => (double)x / words.Length).ToArray();
+        return vector;
+    }
+
+    public double PlagiatAutoExeption(int rappID, byte[] pdf)
         {
             var ListeRapports = context.Rapports.Where(x => x.data != pdf && x.Id != rappID).ToList();
             if (ListeRapports != null)
